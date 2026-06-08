@@ -20,6 +20,12 @@ The system is based on the MWS message:
 
 > Growing with Heart and Purpose.
 
+## Developer usage guide
+
+For implementation rules, product-specific guidance, accessibility expectations, and contribution workflow, see:
+
+[`docs/DEVELOPER_GUIDELINES.md`](docs/DEVELOPER_GUIDELINES.md)
+
 ## Included in this first version
 
 - Brand foundation documentation
