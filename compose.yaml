@@ -1,0 +1,9 @@
+services:
+  mws-ui-kit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mws-ui-kit
+    restart: unless-stopped
+    ports:
+      - "8080:80"
