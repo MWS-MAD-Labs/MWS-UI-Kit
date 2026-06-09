@@ -86,6 +86,26 @@ Preview production build:
 npm run preview
 ```
 
+Build the production Docker image:
+
+```bash
+npm run docker:build
+```
+
+Run the Dockerized site on port `18080`:
+
+```bash
+npm run docker:up
+```
+
+Stop the Dockerized site:
+
+```bash
+npm run docker:down
+```
+
+The container serves the Vite build with Nginx and includes a health check for `/`.
+
 ## Brand colors
 
 | Color | Hex | Role |
