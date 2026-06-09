@@ -206,7 +206,65 @@ Recommended shape values:
 
 ---
 
-## 8. Component Usage Guidance
+## 8. Animation Kit Usage
+
+Motion should make interfaces feel calm, responsive, and purposeful. Use animation to clarify hierarchy, feedback, and progress — not to decorate every element.
+
+### Available motion utilities
+
+| Utility | Use on | Purpose |
+| --- | --- | --- |
+| `motion-fade-up` | Section headers, cards, empty states | Introduce content gently on page load or render |
+| `motion-hover-lift` | Buttons, clickable cards, selectable tiles | Communicate that the element is interactive |
+| `motion-progress-grow` | Progress bars | Reveal learning, reading, or support progress |
+| `motion-float` | Hero accents, illustrations, decorative badges | Add calm ambient motion only where it supports the page mood |
+| `motion-pulse-soft` | Status icons, celebration icons, live indicators | Draw attention without pressure |
+| `motion-orbit` | Hero badges or featured milestone accents | Add a small moment of delight, used sparingly |
+| `motion-delay-100`, `motion-delay-200`, `motion-delay-300`, `motion-delay-500` | Elements using entrance animation | Stagger related items so they do not appear all at once |
+
+### Examples
+
+```tsx
+<Card className="motion-fade-up">
+  <Badge tone="sage">Growing support</Badge>
+  <h3>Student support plan</h3>
+</Card>
+```
+
+```tsx
+<div className="motion-float rounded-3xl bg-white p-6">
+  <Leaf />
+</div>
+```
+
+```tsx
+<ProgressBar value={68} tone="sage" />
+```
+
+`ProgressBar` already applies `motion-progress-grow` internally.
+
+### Rules for design elements
+
+Do:
+
+- Use `motion-fade-up` for first-time content reveal.
+- Use `motion-hover-lift` only when an element is clickable or selectable.
+- Use `motion-progress-grow` for numeric progress that benefits from visual reveal.
+- Keep motion subtle, warm, and short.
+- Trust the kit’s reduced-motion support; continuous motion is disabled for users who prefer reduced motion.
+
+Do not:
+
+- Animate long paragraphs, dense tables, or form fields while users are reading or typing.
+- Stack multiple continuous animations on one important content area.
+- Use motion to create pressure, urgency, or competition.
+- Use fast spins, bounces, flashes, or flashy celebratory effects.
+
+See the homepage **Animation kit** section for live animated examples.
+
+---
+
+## 9. Component Usage Guidance
 
 ### Buttons
 

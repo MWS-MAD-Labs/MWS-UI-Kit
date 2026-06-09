@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -9,8 +10,11 @@ import {
   Lightbulb,
   Menu,
   Sparkles,
+  X,
 } from "lucide-react";
 import {
+  animationGuidelines,
+  animationPatterns,
   checklist,
   colors,
   componentGroups,
@@ -67,6 +71,7 @@ function App() {
       <BrandTokens />
       <TypographySection />
       <ComponentSystem />
+      <AnimationKit />
       <PatternsPreview />
       <ProductExamples />
       <Templates />
@@ -78,10 +83,12 @@ function App() {
 }
 
 function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const links = [
     "Foundations",
     "Tokens",
     "Components",
+    "Motion",
     "Examples",
     "Implementation",
   ];
@@ -113,22 +120,47 @@ function Navigation() {
         </div>
         <button
           className="focus-ring rounded-full border border-[#eadfda] bg-white p-3 text-[#7E1518] md:hidden"
-          aria-label="Open navigation"
+          aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-navigation"
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
         >
-          <Menu size={20} />
+          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
+      {isMenuOpen ? (
+        <div
+          id="mobile-navigation"
+          className="border-t border-[#eadfda] bg-[#fffaf4] px-5 py-4 md:hidden"
+        >
+          <div className="mx-auto grid max-w-7xl gap-2">
+            {links.map((link) => (
+              <a
+                key={link}
+                className="focus-ring heading-font rounded-2xl px-4 py-3 text-sm font-bold text-[#5d4b4c] hover:bg-white hover:text-[#7E1518]"
+                href={`#${link.toLowerCase()}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }
 
 function Hero() {
+  const [selectedEmotion, setSelectedEmotion] = useState("🙂");
+
   return (
     <section id="top" className="relative px-5 py-16 md:py-24 lg:px-8">
       <div className="absolute -left-24 top-20 size-72 rounded-full bg-[#B8DDF8]/30 blur-3xl" />
       <div className="absolute -right-24 top-36 size-80 rounded-full bg-[#D6A13A]/20 blur-3xl" />
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="relative">
+        <div className="relative motion-fade-up">
           <Badge tone="gold">
             Millennia World School digital design system
           </Badge>
@@ -143,19 +175,26 @@ function Hero() {
             future school systems.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button>
+            <Button href="#components">
               Explore components <ArrowRight size={18} />
             </Button>
-            <Button variant="outline">View brand tokens</Button>
-            <Button variant="soft">School patterns</Button>
+            <Button href="#tokens" variant="outline">
+              View brand tokens
+            </Button>
+            <Button href="#motion" variant="soft">
+              See motion kit
+            </Button>
           </div>
           <blockquote className="quote-font mt-10 max-w-2xl border-l-4 border-[#D6A13A] pl-5 text-2xl leading-10 text-[#241718]">
             “Every design should help people feel that MWS is a place where
             goodness grows.”
           </blockquote>
         </div>
-        <div className="relative">
-          <div className="soft-shadow rounded-[2rem] border border-[#eadfda] bg-white p-4">
+        <div className="relative motion-fade-up motion-delay-200">
+          <div className="absolute -right-4 -top-5 flex size-14 items-center justify-center rounded-full bg-[#FBF2DF] text-[#D6A13A] motion-orbit">
+            <Sparkles size={20} />
+          </div>
+          <div className="soft-shadow motion-float rounded-[2rem] border border-[#eadfda] bg-white p-4">
             <div className="rounded-[1.5rem] border border-[#B8DDF8]/70 bg-gradient-to-br from-[#EFF8FE] via-white to-[#EDF3EB] p-5 text-[#241718]">
               <div className="flex items-center justify-between">
                 <div>
@@ -166,7 +205,7 @@ function Hero() {
                     Welcome back, Ms. Sarah
                   </h2>
                 </div>
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-[#D6A13A]/20 text-[#D6A13A]">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-[#D6A13A]/20 text-[#D6A13A] motion-pulse-soft">
                   <Sparkles size={22} />
                 </div>
               </div>
@@ -181,7 +220,7 @@ function Hero() {
                 return (
                   <div
                     key={metric.label}
-                    className="rounded-3xl bg-[#fffaf4] p-5"
+                    className={`motion-fade-up rounded-3xl bg-[#fffaf4] p-5 ${index === 1 ? "motion-delay-100" : index === 2 ? "motion-delay-200" : ""}`}
                   >
                     <Icon className={metricIconThemes[index]} size={24} />
                     <p className="heading-font mt-4 text-3xl font-extrabold text-[#7E1518]">
@@ -228,12 +267,22 @@ function Hero() {
                   {["😊", "🙂", "😐", "😟"].map((emotion) => (
                     <button
                       key={emotion}
-                      className="focus-ring rounded-2xl bg-[#F8EAEB] p-3 transition hover:bg-[#f2d6d8]"
+                      className={`focus-ring rounded-2xl p-3 transition hover:bg-[#f2d6d8] ${selectedEmotion === emotion ? "bg-[#7E1518] text-white" : "bg-[#F8EAEB]"}`}
+                      type="button"
+                      aria-pressed={selectedEmotion === emotion}
+                      aria-label={`Select ${emotion} feeling`}
+                      onClick={() => setSelectedEmotion(emotion)}
                     >
                       {emotion}
                     </button>
                   ))}
                 </div>
+                <p
+                  className="mt-3 text-sm leading-6 text-[#6f6061]"
+                  aria-live="polite"
+                >
+                  Selected feeling: {selectedEmotion}
+                </p>
               </Card>
             </div>
           </div>
@@ -387,7 +436,168 @@ function ComponentSystem() {
   );
 }
 
+function AnimationKit() {
+  const [interactionCount, setInteractionCount] = useState(0);
+
+  return (
+    <section
+      id="motion"
+      className="bg-white px-5 py-20 lg:px-8"
+      aria-labelledby="animation-kit-title"
+    >
+      <SectionHeader
+        eyebrow="Animation kit"
+        title="Calm motion for meaningful design feedback"
+        description="Use the motion utilities to make MWS interfaces feel alive while keeping them readable, gentle, and accessible. The live preview below shows how design elements animate on the homepage."
+      />
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <Card className="overflow-hidden bg-gradient-to-br from-[#fffaf4] via-white to-[#EFF8FE]">
+          <div className="relative rounded-[1.75rem] border border-[#eadfda] bg-white p-5">
+            <div className="absolute right-6 top-6 flex size-12 items-center justify-center rounded-full bg-[#FBF2DF] text-[#D6A13A] motion-orbit">
+              <Sparkles size={18} />
+            </div>
+            <div className="motion-fade-up">
+              <Badge tone="rose">Live preview</Badge>
+              <h3 className="heading-font mt-4 max-w-sm text-3xl font-extrabold tracking-tight text-[#7E1518]">
+                Design elements should move with purpose.
+              </h3>
+              <p className="mt-3 max-w-md leading-7 text-[#6f6061]">
+                Entrance, hover, progress, pulse, and float motion are shown
+                here using only CSS utility classes.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="motion-fade-up motion-delay-100 rounded-3xl border border-[#B8DDF8]/70 bg-[#EFF8FE] p-5">
+                <div className="flex items-center gap-3">
+                  <div className="motion-pulse-soft flex size-11 items-center justify-center rounded-2xl bg-white text-[#25638e]">
+                    <BookOpen size={20} />
+                  </div>
+                  <div>
+                    <p className="heading-font text-sm font-bold text-[#1F2A44]">
+                      Reading progress
+                    </p>
+                    <p className="text-xs text-[#5d4b4c]">
+                      Animated bar reveal
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-5">
+                  <ProgressBar value={78} tone="gold" />
+                </div>
+              </div>
+
+              <div className="motion-fade-up motion-delay-200 rounded-3xl border border-[#6F8B6A]/20 bg-[#EDF3EB] p-5">
+                <div className="motion-float mx-auto flex size-20 items-center justify-center rounded-[1.5rem] bg-white text-[#6F8B6A]">
+                  <Leaf size={32} />
+                </div>
+                <p className="heading-font mt-5 text-center text-lg font-bold text-[#486142]">
+                  Gentle float
+                </p>
+                <p className="mt-2 text-center text-sm leading-6 text-[#5d4b4c]">
+                  Best for hero accents and illustrations.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-3xl border border-[#eadfda] bg-[#fffaf4] p-5 motion-hover-lift">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <Badge tone="sage">Hover this card</Badge>
+                  <p className="heading-font mt-3 text-xl font-bold text-[#241718]">
+                    Interactive states use hover lift.
+                  </p>
+                </div>
+                <Button
+                  variant="soft"
+                  onClick={() => setInteractionCount((count) => count + 1)}
+                  ariaLabel="Try the hover lift interaction demo"
+                >
+                  Try interaction
+                </Button>
+              </div>
+              <p
+                className="mt-4 text-sm leading-6 text-[#6f6061]"
+                aria-live="polite"
+              >
+                Interaction demo clicked {interactionCount}{" "}
+                {interactionCount === 1 ? "time" : "times"}.
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        <div className="grid gap-5">
+          <Card>
+            <h3
+              id="animation-kit-title"
+              className="heading-font text-2xl font-extrabold text-[#241718]"
+            >
+              How to use motion on design elements
+            </h3>
+            <div className="mt-5 grid gap-3">
+              {animationGuidelines.map((guide) => (
+                <div
+                  key={guide}
+                  className="flex gap-3 rounded-2xl bg-[#fffaf4] p-4"
+                >
+                  <CheckCircle2
+                    className="mt-0.5 shrink-0 text-[#6F8B6A]"
+                    size={19}
+                  />
+                  <p className="leading-7 text-[#5d4b4c]">{guide}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {animationPatterns.map((pattern, index) => (
+              <Card
+                key={pattern.name}
+                className={`motion-fade-up ${index % 2 === 1 ? "motion-delay-100" : ""}`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <Badge
+                      tone={
+                        index % 3 === 0
+                          ? "burgundy"
+                          : index % 3 === 1
+                            ? "sky"
+                            : "gold"
+                      }
+                    >
+                      {pattern.className}
+                    </Badge>
+                    <h4 className="heading-font mt-4 text-lg font-bold text-[#7E1518]">
+                      {pattern.name}
+                    </h4>
+                  </div>
+                  <div className="motion-pulse-soft flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#FBF2DF] text-[#D6A13A]">
+                    <Sparkles size={18} />
+                  </div>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-[#6f6061]">
+                  {pattern.purpose}
+                </p>
+                <code className="mt-4 block rounded-2xl bg-[#241718] px-4 py-3 text-xs leading-5 text-white">
+                  {pattern.usage}
+                </code>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PatternsPreview() {
+  const [previewAction, setPreviewAction] = useState(
+    "Choose a button action to preview feedback.",
+  );
+
   return (
     <section className="px-5 py-20 lg:px-8">
       <SectionHeader
@@ -401,12 +611,41 @@ function PatternsPreview() {
             Buttons
           </h3>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Button>Continue</Button>
-            <Button variant="gold">Celebrate progress</Button>
-            <Button variant="soft">Save reflection</Button>
-            <Button variant="outline">View details</Button>
-            <Button variant="ghost">Cancel</Button>
+            <Button
+              onClick={() => setPreviewAction("Continue action selected.")}
+            >
+              Continue
+            </Button>
+            <Button
+              variant="gold"
+              onClick={() => setPreviewAction("Celebration action selected.")}
+            >
+              Celebrate progress
+            </Button>
+            <Button
+              variant="soft"
+              onClick={() =>
+                setPreviewAction("Reflection saved in the preview.")
+              }
+            >
+              Save reflection
+            </Button>
+            <Button href="#examples" variant="outline">
+              View details
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setPreviewAction("Preview action cancelled.")}
+            >
+              Cancel
+            </Button>
           </div>
+          <p
+            className="mt-4 text-sm leading-6 text-[#6f6061]"
+            aria-live="polite"
+          >
+            {previewAction}
+          </p>
         </Card>
         <Card>
           <h3 className="heading-font text-xl font-bold text-[#241718]">

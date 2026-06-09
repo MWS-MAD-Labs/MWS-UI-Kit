@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 const buttonBase =
-  "focus-ring inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60 heading-font";
+  "focus-ring motion-hover-lift inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60 heading-font";
 
 const buttonVariants = {
   primary: "bg-[#7E1518] text-white hover:bg-[#681114]",
@@ -18,11 +18,39 @@ type ButtonVariant = keyof typeof buttonVariants;
 type ButtonProps = {
   children: ReactNode;
   variant?: ButtonVariant;
+  href?: string;
+  onClick?: () => void;
+  className?: string;
+  ariaLabel?: string;
+  type?: "button" | "submit" | "reset";
 };
 
-export function Button({ children, variant = "primary" }: ButtonProps) {
+export function Button({
+  children,
+  variant = "primary",
+  href,
+  onClick,
+  className = "",
+  ariaLabel,
+  type = "button",
+}: ButtonProps) {
+  const classes = `${buttonBase} ${buttonVariants[variant]} ${className}`;
+
+  if (href) {
+    return (
+      <a className={classes} href={href} aria-label={ariaLabel}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <button className={`${buttonBase} ${buttonVariants[variant]}`}>
+    <button
+      className={classes}
+      onClick={onClick}
+      type={type}
+      aria-label={ariaLabel}
+    >
       {children}
     </button>
   );
@@ -37,7 +65,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-3xl border border-[#eadfda] bg-white p-6 card-shadow ${className}`}
+      className={`motion-hover-lift rounded-3xl border border-[#eadfda] bg-white p-6 card-shadow ${className}`}
     >
       {children}
     </div>
@@ -145,7 +173,7 @@ export function ProgressBar({
       aria-label={`${value}% complete`}
     >
       <div
-        className={`h-full rounded-full ${tones[tone]}`}
+        className={`motion-progress-grow h-full rounded-full ${tones[tone]}`}
         style={{ width: `${value}%` }}
       />
     </div>
