@@ -6,4 +6,4 @@ services:
     container_name: mws-ui-kit
     restart: unless-stopped
     ports:
-      - "127.0.0.1:18080:80"
+      - "0.0.0.0:18080:80"
