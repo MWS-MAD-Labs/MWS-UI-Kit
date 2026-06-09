@@ -54,9 +54,54 @@ jobs:
     needs: build-and-publish
     env:
       KOMODO_WEBHOOK_URL: ${{ secrets.KOMODO_WEBHOOK_URL }}
+      KOMODO_WEBHOOK_SECRET: ${{ secrets.KOMODO_WEBHOOK_SECRET }}
 
     steps:
-      - name: Call Komodo webhook
-        if: ${{ env.KOMODO_WEBHOOK_URL != '' }}
+      - name: Call Komodo GitHub listener
+        if: ${{ env.KOMODO_WEBHOOK_URL != '' && env.KOMODO_WEBHOOK_SECRET != '' }}
         run: |
-          curl --fail --silent --show-error --request POST "$KOMODO_WEBHOOK_URL"
+          python3 <<'PY' > /tmp/komodo_webhook.env
+          import hashlib
+          import hmac
+          import json
+          import os
+          import uuid
+
+          payload = {
+              "ref": "refs/heads/main",
+              "after": os.environ["GITHUB_SHA"],
+              "repository": {
+                  "full_name": os.environ["GITHUB_REPOSITORY"],
+                  "name": os.environ["GITHUB_REPOSITORY"].split("/", 1)[1],
+                  "owner": {
+                      "name": os.environ["GITHUB_REPOSITORY"].split("/", 1)[0]
+                  },
+              },
+              "sender": {
+                  "login": os.environ["GITHUB_ACTOR"]
+              },
+          }
+          body = json.dumps(payload, separators=(",", ":"))
+          secret = os.environ["KOMODO_WEBHOOK_SECRET"].encode()
+          signature = hmac.new(secret, body.encode(), hashlib.sha256).hexdigest()
+
+          with open("/tmp/komodo_payload.json", "w", encoding="utf-8") as file:
+              file.write(body)
+
+          print(f"GITHUB_DELIVERY={uuid.uuid4()}")
+          print(f"GITHUB_SIGNATURE=sha256={signature}")
+          PY
+
+          . /tmp/komodo_webhook.env
+
+          curl --fail --silent --show-error \
+            --request POST "$KOMODO_WEBHOOK_URL" \
+            --header "Content-Type: application/json" \
+            --header "X-GitHub-Event: push" \
+            --header "X-GitHub-Delivery: $GITHUB_DELIVERY" \
+            --header "X-Hub-Signature-256: $GITHUB_SIGNATURE" \
+            --data-binary @/tmp/komodo_payload.json
+
+      - name: Skip Komodo webhook
+        if: ${{ env.KOMODO_WEBHOOK_URL == '' || env.KOMODO_WEBHOOK_SECRET == '' }}
+        run: echo "KOMODO_WEBHOOK_URL or KOMODO_WEBHOOK_SECRET is not configured; skipping Komodo redeploy."
