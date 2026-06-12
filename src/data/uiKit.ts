@@ -83,6 +83,61 @@ export const foundations = [
   },
 ];
 
+export const aiAgentBrief = [
+  {
+    label: "Start here",
+    title: "Use the decision order",
+    detail:
+      "Identify product context, choose one support color, compose from existing patterns, then validate accessibility and tone.",
+    source: "docs/AI_AGENT_GUIDE.md",
+  },
+  {
+    label: "Token source",
+    title: "Prefer CSS variables and kit arrays",
+    detail:
+      "Use :root tokens in src/styles/global.css and structured data in src/data/uiKit.ts before inventing new values.",
+    source: "src/styles/global.css",
+  },
+  {
+    label: "Component source",
+    title: "Reuse primitives first",
+    detail:
+      "Buttons, cards, badges, inputs, progress, empty states, and section headers live in UIPrimitives.tsx.",
+    source: "src/components/UIPrimitives.tsx",
+  },
+  {
+    label: "Output check",
+    title: "Ship compassionate, readable UI",
+    detail:
+      "Avoid punitive language, crowded layouts, random colors, inaccessible controls, and decorative motion overload.",
+    source: "docs/DEVELOPER_GUIDELINES.md",
+  },
+];
+
+export const agentDecisionFlow = [
+  "Read docs/AI_AGENT_GUIDE.md for the compact workflow.",
+  "Match the screen to one product context: reading, wellbeing, MTSS, performance, parent communication, or admin.",
+  "Use Burgundy, White, and Charcoal as the base; add only one meaningful secondary color unless the product guidance says otherwise.",
+  "Compose the screen from existing primitives and page templates before creating a new component.",
+  "Write warm, specific copy that explains the next action without shame, fear, or pressure.",
+  "Check focus states, labels, contrast, keyboard access, reduced motion, and build output before finishing.",
+];
+
+export const agentDoDont = {
+  do: [
+    "Use semantic headings, visible labels, and short sections that are easy to scan.",
+    "Keep one primary action per view and make secondary actions visually quieter.",
+    "Use status words like Growing, Guided support, Evidence ready, and Completed.",
+    "Reference existing tokens, motion utilities, and component examples in this repository.",
+  ],
+  dont: [
+    "Do not invent a new brand palette, font family, shadow system, or animation style.",
+    "Do not describe students with fixed, punitive, or deficit-based labels.",
+    "Do not overcrowd dashboards with unrelated widgets above the fold.",
+    "Do not use color alone to communicate meaning or status.",
+  ],
+};
+
 export const componentGroups = [
   {
     title: "Foundation components",

@@ -20,14 +20,17 @@ The system is based on the MWS message:
 
 > Growing with Heart and Purpose.
 
-## Developer usage guide
+## AI agent and developer usage guides
 
-For implementation rules, product-specific guidance, accessibility expectations, and contribution workflow, see:
+This UI kit is optimized for AI coding agents as a primary consumer. Start with the compact agent guide, then use the full developer guide for detailed rules.
 
-[`docs/DEVELOPER_GUIDELINES.md`](docs/DEVELOPER_GUIDELINES.md)
+- [`docs/AI_AGENT_GUIDE.md`](docs/AI_AGENT_GUIDE.md) — concise read order, decision workflow, do/don't rules, copy guidance, and accessibility checklist for AI agents.
+- [`llms.txt`](llms.txt) — machine-readable repository map and canonical rules.
+- [`docs/DEVELOPER_GUIDELINES.md`](docs/DEVELOPER_GUIDELINES.md) — full implementation rules, product-specific guidance, accessibility expectations, and contribution workflow.
 
 ## Included in this first version
 
+- AI agent quick-start section and machine-readable `llms.txt`
 - Brand foundation documentation
 - MWS color palette and semantic usage guidance
 - Typography guidance using Google Fonts

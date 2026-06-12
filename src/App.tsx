@@ -1,9 +1,11 @@
 import { useState } from "react";
 import {
   ArrowRight,
+  Bot,
   BookOpen,
   CheckCircle2,
   Circle,
+  ClipboardCheck,
   Compass,
   Heart,
   Leaf,
@@ -13,6 +15,9 @@ import {
   X,
 } from "lucide-react";
 import {
+  agentDecisionFlow,
+  agentDoDont,
+  aiAgentBrief,
   animationGuidelines,
   animationPatterns,
   checklist,
@@ -67,6 +72,7 @@ function App() {
     <main className="min-h-screen overflow-hidden bg-[#fffaf4] text-[#241718]">
       <Navigation />
       <Hero />
+      <AiAgentGuide />
       <Foundations />
       <BrandTokens />
       <TypographySection />
@@ -85,6 +91,7 @@ function App() {
 function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const links = [
+    "AI Guide",
     "Foundations",
     "Tokens",
     "Components",
@@ -112,7 +119,7 @@ function Navigation() {
             <a
               key={link}
               className="heading-font text-sm font-bold text-[#5d4b4c] transition hover:text-[#7E1518]"
-              href={`#${link.toLowerCase()}`}
+              href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
             >
               {link}
             </a>
@@ -139,7 +146,7 @@ function Navigation() {
               <a
                 key={link}
                 className="focus-ring heading-font rounded-2xl px-4 py-3 text-sm font-bold text-[#5d4b4c] hover:bg-white hover:text-[#7E1518]"
-                href={`#${link.toLowerCase()}`}
+                href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link}
@@ -286,6 +293,107 @@ function Hero() {
               </Card>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AiAgentGuide() {
+  return (
+    <section id="ai-guide" className="bg-white px-5 py-16 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+          <div>
+            <Badge tone="navy">AI agent quick start</Badge>
+            <h2 className="heading-font mt-5 text-4xl font-extrabold tracking-tight text-[#7E1518]">
+              Build from the compact rules first
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-[#5d4b4c]">
+              This UI kit is expected to be read by coding agents as much as
+              humans. Use this section as the fastest path to the right files,
+              decisions, and guardrails before changing any product screen.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-[#eadfda] bg-[#fffaf4] p-5">
+            <p className="heading-font text-sm font-bold uppercase tracking-[0.18em] text-[#7E1518]">
+              Canonical agent path
+            </p>
+            <ol className="mt-4 grid gap-3">
+              {agentDecisionFlow.map((step, index) => (
+                <li key={step} className="flex gap-3 rounded-2xl bg-white p-4">
+                  <span className="heading-font flex size-8 shrink-0 items-center justify-center rounded-full bg-[#E9EDF6] text-sm font-extrabold text-[#1F2A44]">
+                    {index + 1}
+                  </span>
+                  <p className="leading-7 text-[#5d4b4c]">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-4">
+          {aiAgentBrief.map((item) => (
+            <Card key={item.title} className="shadow-none">
+              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-[#EFF8FE] text-[#25638e]">
+                <Bot size={24} />
+              </div>
+              <Badge tone="sky">{item.label}</Badge>
+              <h3 className="heading-font mt-4 text-xl font-bold text-[#241718]">
+                {item.title}
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-[#6f6061]">
+                {item.detail}
+              </p>
+              <code className="mt-4 block rounded-2xl bg-[#241718] px-4 py-3 text-xs leading-5 text-white">
+                {item.source}
+              </code>
+            </Card>
+          ))}
+        </div>
+
+        <div className="mt-6 grid gap-5 lg:grid-cols-2">
+          <Card className="shadow-none">
+            <div className="flex items-center gap-3">
+              <ClipboardCheck className="text-[#6F8B6A]" size={24} />
+              <h3 className="heading-font text-2xl font-bold text-[#241718]">
+                Agent do
+              </h3>
+            </div>
+            <div className="mt-5 grid gap-3">
+              {agentDoDont.do.map((item) => (
+                <div
+                  key={item}
+                  className="flex gap-3 rounded-2xl bg-[#EDF3EB] p-4"
+                >
+                  <CheckCircle2
+                    className="mt-0.5 shrink-0 text-[#6F8B6A]"
+                    size={19}
+                  />
+                  <p className="leading-7 text-[#486142]">{item}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+          <Card className="shadow-none">
+            <div className="flex items-center gap-3">
+              <X className="text-[#B94A4E]" size={24} />
+              <h3 className="heading-font text-2xl font-bold text-[#241718]">
+                Agent do not
+              </h3>
+            </div>
+            <div className="mt-5 grid gap-3">
+              {agentDoDont.dont.map((item) => (
+                <div
+                  key={item}
+                  className="flex gap-3 rounded-2xl bg-[#F8EAEB] p-4"
+                >
+                  <X className="mt-0.5 shrink-0 text-[#B94A4E]" size={18} />
+                  <p className="leading-7 text-[#7E1518]">{item}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
       </div>
     </section>
