@@ -1,6 +1,7 @@
 import {
   createContext,
   forwardRef,
+  type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
   type InputHTMLAttributes,
@@ -58,61 +59,69 @@ const buttonSizes = {
 export type ButtonVariant = keyof typeof buttonVariants;
 export type ButtonSize = keyof typeof buttonSizes;
 
-export type ButtonProps = {
-  children: ReactNode;
+type ButtonOwnProps = {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  href?: string;
   loading?: boolean;
   fullWidth?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   ariaLabel?: string;
-} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> &
-  Omit<ComponentPropsWithoutRef<"a">, "children" | "href">;
+};
+
+type ButtonAsButtonProps = ButtonOwnProps &
+  Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    keyof ButtonOwnProps | "href"
+  > & {
+    href?: never;
+  };
+
+type ButtonAsAnchorProps = ButtonOwnProps &
+  Omit<
+    AnchorHTMLAttributes<HTMLAnchorElement>,
+    keyof ButtonOwnProps | "type"
+  > & {
+    href: string;
+    disabled?: boolean;
+    type?: never;
+  };
+
+export type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps;
+
+function isButtonAnchorProps(props: ButtonProps): props is ButtonAsAnchorProps {
+  return typeof props.href === "string";
+}
 
 export const Button = forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   ButtonProps
->(function Button(
-  {
-    children,
-    variant = "primary",
-    size = "md",
-    href,
-    loading = false,
-    fullWidth = false,
-    leftIcon,
-    rightIcon,
-    className = "",
-    ariaLabel,
-    disabled,
-    type = "button",
-    ...props
-  },
-  ref,
-) {
-  const classes = cx(
-    buttonBase,
-    buttonVariants[variant],
-    buttonSizes[size],
-    !disabled && !loading && "motion-hover-lift",
-    fullWidth && "w-full",
-    className,
-  );
-  const content = (
-    <>
-      {loading ? (
-        <Loader2 aria-hidden="true" className="size-4 animate-spin" />
-      ) : (
-        leftIcon
-      )}
-      <span>{children}</span>
-      {!loading ? rightIcon : null}
-    </>
-  );
+>(function Button(props, ref) {
+  if (isButtonAnchorProps(props)) {
+    const {
+      children,
+      variant = "primary",
+      size = "md",
+      href,
+      loading = false,
+      fullWidth = false,
+      leftIcon,
+      rightIcon,
+      className = "",
+      ariaLabel,
+      disabled,
+      ...anchorProps
+    } = props;
 
-  if (href) {
+    const classes = cx(
+      buttonBase,
+      buttonVariants[variant],
+      buttonSizes[size],
+      !disabled && !loading && "motion-hover-lift",
+      fullWidth && "w-full",
+      className
+    );
+
     return (
       <a
         ref={ref as Ref<HTMLAnchorElement>}
@@ -121,12 +130,42 @@ export const Button = forwardRef<
         aria-label={ariaLabel}
         aria-disabled={disabled || loading || undefined}
         aria-busy={loading || undefined}
-        {...props}
+        {...anchorProps}
       >
-        {content}
+        {loading ? (
+          <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+        ) : (
+          leftIcon
+        )}
+        <span>{children}</span>
+        {!loading ? rightIcon : null}
       </a>
     );
   }
+
+  const {
+    children,
+    variant = "primary",
+    size = "md",
+    loading = false,
+    fullWidth = false,
+    leftIcon,
+    rightIcon,
+    className = "",
+    ariaLabel,
+    disabled,
+    type = "button",
+    ...buttonProps
+  } = props;
+
+  const classes = cx(
+    buttonBase,
+    buttonVariants[variant],
+    buttonSizes[size],
+    !disabled && !loading && "motion-hover-lift",
+    fullWidth && "w-full",
+    className
+  );
 
   return (
     <button
@@ -136,9 +175,15 @@ export const Button = forwardRef<
       disabled={disabled || loading}
       aria-label={ariaLabel}
       aria-busy={loading || undefined}
-      {...props}
+      {...buttonProps}
     >
-      {content}
+      {loading ? (
+        <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+      ) : (
+        leftIcon
+      )}
+      <span>{children}</span>
+      {!loading ? rightIcon : null}
     </button>
   );
 });
@@ -179,7 +224,7 @@ export function IconButton({
         buttonVariants[variant],
         sizeClasses[size],
         !disabled && !loading && "motion-hover-lift",
-        className,
+        className
       )}
       type={type}
       aria-label={label}
@@ -235,7 +280,7 @@ export function Card({
         "radius-xl",
         variants[variant],
         paddings[padding],
-        className,
+        className
       )}
       {...props}
     >
@@ -299,7 +344,7 @@ export function Badge({
         "heading-font inline-flex items-center gap-1 radius-full font-bold",
         tones[tone],
         sizes[size],
-        className,
+        className
       )}
       {...props}
     >
@@ -380,7 +425,7 @@ export type InputProps = {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   { label, helperText, error, className = "", id, required, ...props },
-  ref,
+  ref
 ) {
   return (
     <FieldShell
@@ -397,7 +442,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           className={cx(
             fieldControlBase,
             invalid && "border-status-error",
-            className,
+            className
           )}
           aria-describedby={describedBy}
           aria-invalid={invalid || undefined}
@@ -441,7 +486,7 @@ export function Textarea({
             fieldControlBase,
             "resize-y",
             invalid && "border-status-error",
-            className,
+            className
           )}
           aria-describedby={describedBy}
           aria-invalid={invalid || undefined}
@@ -493,7 +538,7 @@ export function Select({
             fieldControlBase,
             "appearance-auto",
             invalid && "border-status-error",
-            className,
+            className
           )}
           aria-describedby={describedBy}
           aria-invalid={invalid || undefined}
@@ -545,7 +590,7 @@ export function Checkbox({
           type="checkbox"
           className={cx(
             "focus-ring mt-1 size-5 shrink-0 radius-sm accent-[var(--mws-color-brand-primary)]",
-            className,
+            className
           )}
           aria-describedby={describedBy}
           aria-invalid={Boolean(error) || undefined}
@@ -627,7 +672,7 @@ export function RadioGroup({
               key={option.value}
               className={cx(
                 "flex cursor-pointer items-start gap-3 radius-lg border border-subtle bg-surface-card p-4 transition",
-                option.disabled && "cursor-not-allowed opacity-60",
+                option.disabled && "cursor-not-allowed opacity-60"
               )}
             >
               <input
@@ -856,11 +901,11 @@ const focusableElementSelector = [
 function getFocusableElements(container: HTMLElement | null) {
   if (!container) return [];
   return Array.from(
-    container.querySelectorAll<HTMLElement>(focusableElementSelector),
+    container.querySelectorAll<HTMLElement>(focusableElementSelector)
   ).filter(
     (element) =>
       !element.hasAttribute("disabled") &&
-      element.getAttribute("aria-hidden") !== "true",
+      element.getAttribute("aria-hidden") !== "true"
   );
 }
 
@@ -884,7 +929,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     footer,
     closeLabel = "Close dialog",
   },
-  ref,
+  ref
 ) {
   const titleId = useId();
   const descriptionId = useId();
@@ -952,7 +997,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
     <div
       className={cx(
         "fixed inset-0 z-[60] flex items-center justify-center p-4",
-        overlayBackdropClassName,
+        overlayBackdropClassName
       )}
       role="presentation"
       onMouseDown={() => onOpenChange(false)}
@@ -995,7 +1040,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
         ) : null}
       </div>
     </div>,
-    document.body,
+    document.body
   );
 });
 
@@ -1026,7 +1071,7 @@ export function Tabs({
   label = "Section tabs",
 }: TabsProps) {
   const [internalValue, setInternalValue] = useState(
-    defaultValue ?? tabs[0]?.id,
+    defaultValue ?? tabs[0]?.id
   );
   const selectedValue = value ?? internalValue;
   const selectedTab = tabs.find((tab) => tab.id === selectedValue) ?? tabs[0];
@@ -1053,7 +1098,7 @@ export function Tabs({
                 selected
                   ? "border-[var(--mws-color-brand-primary)] text-brand"
                   : "border-transparent text-tertiary hover:text-brand",
-                tab.disabled && "cursor-not-allowed opacity-50",
+                tab.disabled && "cursor-not-allowed opacity-50"
               )}
               type="button"
               role="tab"
@@ -1094,7 +1139,7 @@ export function Skeleton({
     <div
       className={cx(
         "animate-pulse radius-md bg-[color-mix(in_srgb,var(--mws-color-border-subtle)_70%,transparent)]",
-        className,
+        className
       )}
       aria-hidden="true"
       {...props}
@@ -1127,7 +1172,7 @@ export function EmptyState({
     <div
       className={cx(
         "radius-xl border border-dashed border-status-warning bg-status-warning p-6 text-center",
-        className,
+        className
       )}
     >
       {icon ? (
@@ -1174,7 +1219,7 @@ export function SectionHeader({
       <h2
         className={cx(
           "heading-font text-3xl font-extrabold tracking-tight md:text-4xl",
-          inverse ? "text-inverse" : "text-brand",
+          inverse ? "text-inverse" : "text-brand"
         )}
       >
         {title}
@@ -1185,7 +1230,7 @@ export function SectionHeader({
             "mt-4 text-lg leading-8",
             inverse
               ? "text-[color-mix(in_srgb,var(--mws-color-text-inverse)_75%,transparent)]"
-              : "text-secondary",
+              : "text-secondary"
           )}
         >
           {description}

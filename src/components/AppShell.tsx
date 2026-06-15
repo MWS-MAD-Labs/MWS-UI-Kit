@@ -212,7 +212,7 @@ function BrandLockup({
   );
 }
 
-export function Sidebar({
+function Sidebar({
   navigation,
   footer,
   onNavigate,
@@ -277,7 +277,7 @@ function SidebarItem({
             "focus-ring heading-font group flex w-full items-center gap-3 radius-lg px-3 py-2.5 text-left text-sm font-bold transition hover:bg-surface-base hover:text-brand",
             item.current
               ? "is-current bg-brand-primary-soft text-brand"
-              : "text-secondary",
+              : "text-secondary"
           )}
           type="button"
           aria-expanded={expanded}
@@ -291,7 +291,7 @@ function SidebarItem({
             "focus-ring heading-font group flex items-center gap-3 radius-lg px-3 py-2.5 text-sm font-bold transition hover:bg-surface-base hover:text-brand",
             item.current
               ? "is-current bg-brand-primary-soft text-brand"
-              : "text-secondary",
+              : "text-secondary"
           )}
           href={item.href}
           aria-current={item.current ? "page" : undefined}
@@ -315,7 +315,7 @@ function SidebarItem({
   );
 }
 
-export function TopBar({
+function TopBar({
   appName,
   logo,
   onMenuClick,
@@ -339,7 +339,7 @@ export function TopBar({
       className={cx(
         "sticky top-0 z-40 border-b border-subtle",
         headerBackdropClassName,
-        className,
+        className
       )}
     >
       <div className="flex min-h-16 items-center gap-3 px-4 md:px-6 lg:px-8">
@@ -375,7 +375,7 @@ function GlobalSearchPlaceholder() {
   );
 }
 
-export function Breadcrumbs({
+function Breadcrumbs({
   items,
   className = "",
 }: {
@@ -416,7 +416,7 @@ export function Breadcrumbs({
   );
 }
 
-export function PageHeader({
+function PageHeader({
   eyebrow,
   title,
   description,
@@ -437,7 +437,7 @@ export function PageHeader({
     <div
       className={cx(
         "mb-8 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between",
-        className,
+        className
       )}
     >
       <div className="min-w-0">
@@ -477,7 +477,7 @@ export function PageHeader({
   );
 }
 
-export function UserMenu({
+function UserMenu({
   name,
   role,
   avatar,
@@ -517,7 +517,7 @@ export function UserMenu({
         <ChevronDown
           className={cx(
             "size-4 text-tertiary transition",
-            open && "rotate-180",
+            open && "rotate-180"
           )}
           aria-hidden="true"
         />
@@ -533,7 +533,7 @@ export function UserMenu({
               "focus-ring block w-full radius-md px-3 py-2 text-left text-sm font-semibold transition hover:bg-surface-base",
               item.tone === "danger"
                 ? "text-status-error"
-                : "text-secondary hover:text-brand",
+                : "text-secondary hover:text-brand"
             );
             if (item.href) {
               return (
@@ -569,7 +569,7 @@ export function UserMenu({
   );
 }
 
-export function AppSwitcher({
+function AppSwitcher({
   apps,
   label = "Open app switcher",
 }: {
@@ -604,7 +604,7 @@ export function AppSwitcher({
                 key={app.href}
                 className={cx(
                   "focus-ring flex gap-3 radius-lg p-3 transition hover:bg-surface-base",
-                  app.current && "bg-brand-primary-soft",
+                  app.current && "bg-brand-primary-soft"
                 )}
                 href={app.href}
                 role="menuitem"
@@ -633,7 +633,7 @@ export function AppSwitcher({
   );
 }
 
-export function NotificationCenter({
+function NotificationCenter({
   notifications,
   onMarkAllRead,
   label = "Open notifications",
@@ -645,7 +645,7 @@ export function NotificationCenter({
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const unreadCount = notifications.filter(
-    (notification) => notification.unread,
+    (notification) => notification.unread
   ).length;
 
   return (
@@ -698,7 +698,7 @@ export function NotificationCenter({
                   <div
                     className={cx(
                       "flex gap-3 radius-lg p-3 transition hover:bg-surface-base",
-                      notification.unread && "bg-brand-primary-soft",
+                      notification.unread && "bg-brand-primary-soft"
                     )}
                   >
                     <span className="mt-1 flex size-8 shrink-0 items-center justify-center radius-full bg-surface-card text-brand">
