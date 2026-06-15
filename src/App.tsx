@@ -33,6 +33,10 @@ import {
 } from "./data/uiKit";
 import { headerBackdropClassName } from "./components/classNames";
 import {
+  CommandPalette,
+  type CommandPaletteItem,
+} from "./components/CommandPalette";
+import {
   Badge,
   Button,
   Card,
@@ -78,9 +82,96 @@ const metricIconThemes = [
 ];
 
 function App() {
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+
+  const jumpToSection = (sectionId: string) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+    window.history.replaceState(null, "", `#${sectionId}`);
+  };
+
+  const commandItems: CommandPaletteItem[] = [
+    {
+      id: "top",
+      label: "Go to hero",
+      description: "Jump to the top of the UI kit homepage",
+      keywords: ["home", "start", "intro"],
+      group: "Navigate",
+      icon: <Compass className="size-4" />,
+      onSelect: () => jumpToSection("top"),
+    },
+    {
+      id: "ai-guide",
+      label: "Open AI guide",
+      description: "Read the coding agent quick start",
+      keywords: ["agent", "rules", "llm"],
+      group: "Navigate",
+      icon: <Bot className="size-4" />,
+      onSelect: () => jumpToSection("ai-guide"),
+    },
+    {
+      id: "foundations",
+      label: "Open foundations",
+      description: "Review design direction and values",
+      keywords: ["principles", "values"],
+      group: "Navigate",
+      icon: <Heart className="size-4" />,
+      onSelect: () => jumpToSection("foundations"),
+    },
+    {
+      id: "tokens",
+      label: "Open tokens",
+      description: "View color and brand token guidance",
+      keywords: ["brand", "color", "design tokens"],
+      group: "Navigate",
+      icon: <Sparkles className="size-4" />,
+      onSelect: () => jumpToSection("tokens"),
+    },
+    {
+      id: "components",
+      label: "Open components",
+      description: "Explore reusable component guidance",
+      keywords: ["primitives", "patterns"],
+      group: "Navigate",
+      icon: <BookOpen className="size-4" />,
+      onSelect: () => jumpToSection("components"),
+    },
+    {
+      id: "motion",
+      label: "Open motion",
+      description: "Review animation principles and previews",
+      keywords: ["animation", "movement"],
+      group: "Navigate",
+      icon: <Lightbulb className="size-4" />,
+      onSelect: () => jumpToSection("motion"),
+    },
+    {
+      id: "examples",
+      label: "Open examples",
+      description: "See product references and school contexts",
+      keywords: ["products", "apps"],
+      group: "Navigate",
+      icon: <ClipboardCheck className="size-4" />,
+      onSelect: () => jumpToSection("examples"),
+    },
+    {
+      id: "implementation",
+      label: "Open implementation plan",
+      description: "Jump to phased rollout guidance",
+      keywords: ["plan", "phases", "checklist"],
+      group: "Navigate",
+      icon: <CheckCircle2 className="size-4" />,
+      onSelect: () => jumpToSection("implementation"),
+    },
+  ];
+
   return (
     <main className="min-h-screen overflow-hidden bg-surface-base text-primary">
       <Navigation />
+      <CommandPalette
+        open={commandPaletteOpen}
+        onOpenChange={setCommandPaletteOpen}
+        items={commandItems}
+      />
       <Hero />
       <AiAgentGuide />
       <Foundations />
@@ -239,7 +330,13 @@ function Hero() {
                 return (
                   <div
                     key={metric.label}
-                    className={`motion-fade-up rounded-3xl bg-surface-base p-5 ${index === 1 ? "motion-delay-100" : index === 2 ? "motion-delay-200" : ""}`}
+                    className={`motion-fade-up rounded-3xl bg-surface-base p-5 ${
+                      index === 1
+                        ? "motion-delay-100"
+                        : index === 2
+                        ? "motion-delay-200"
+                        : ""
+                    }`}
                   >
                     <Icon className={metricIconThemes[index]} size={24} />
                     <p className="heading-font mt-4 text-3xl font-extrabold text-brand">
@@ -286,7 +383,11 @@ function Hero() {
                   {["😊", "🙂", "😐", "😟"].map((emotion) => (
                     <button
                       key={emotion}
-                      className={`focus-ring rounded-2xl p-3 transition hover:bg-[var(--mws-color-brand-primary-softer)] ${selectedEmotion === emotion ? "bg-brand-primary text-inverse" : "bg-brand-rose-soft"}`}
+                      className={`focus-ring rounded-2xl p-3 transition hover:bg-[var(--mws-color-brand-primary-softer)] ${
+                        selectedEmotion === emotion
+                          ? "bg-brand-primary text-inverse"
+                          : "bg-brand-rose-soft"
+                      }`}
                       type="button"
                       aria-pressed={selectedEmotion === emotion}
                       aria-label={`Select ${emotion} feeling`}
@@ -457,7 +558,9 @@ function BrandTokens() {
         {colors.map((color) => (
           <Card key={color.name} className="shadow-none">
             <div
-              className={`h-28 rounded-3xl ${color.bordered ? "border border-subtle" : ""}`}
+              className={`h-28 rounded-3xl ${
+                color.bordered ? "border border-subtle" : ""
+              }`}
               style={{ background: color.cssVar }}
             />
             <div className="mt-5">
@@ -676,7 +779,9 @@ function AnimationKit() {
             {animationPatterns.map((pattern, index) => (
               <Card
                 key={pattern.name}
-                className={`motion-fade-up ${index % 2 === 1 ? "motion-delay-100" : ""}`}
+                className={`motion-fade-up ${
+                  index % 2 === 1 ? "motion-delay-100" : ""
+                }`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -685,8 +790,8 @@ function AnimationKit() {
                         index % 3 === 0
                           ? "burgundy"
                           : index % 3 === 1
-                            ? "sky"
-                            : "gold"
+                          ? "sky"
+                          : "gold"
                       }
                     >
                       {pattern.className}
@@ -716,7 +821,7 @@ function AnimationKit() {
 
 function PatternsPreview() {
   const [previewAction, setPreviewAction] = useState(
-    "Choose a button action to preview feedback.",
+    "Choose a button action to preview feedback."
   );
 
   return (
