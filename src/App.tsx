@@ -31,6 +31,7 @@ import {
   statuses,
   values,
 } from "./data/uiKit";
+import { headerBackdropClassName } from "./components/classNames";
 import {
   Badge,
   Button,
@@ -110,7 +111,9 @@ function Navigation() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[color-mix(in_srgb,var(--mws-color-border-subtle)_80%,transparent)] bg-[color-mix(in_srgb,var(--mws-color-surface-base)_90%,transparent)] backdrop-blur-xl">
+    <header
+      className={`sticky top-0 z-50 border-b border-[color-mix(in_srgb,var(--mws-color-border-subtle)_80%,transparent)] ${headerBackdropClassName}`}
+    >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#top" className="flex items-center gap-3">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-brand-primary text-inverse shadow-lg shadow-brand">

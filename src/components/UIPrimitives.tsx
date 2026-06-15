@@ -1,15 +1,20 @@
 import {
   createContext,
+  forwardRef,
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
   type InputHTMLAttributes,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MutableRefObject,
   type ReactNode,
+  type Ref,
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
   useContext,
   useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -22,10 +27,7 @@ import {
   TriangleAlert,
   X,
 } from "lucide-react";
-
-function cx(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx, overlayBackdropClassName } from "./classNames";
 
 /* -------------------------------------------------------------------------------------------------
  * Button
@@ -53,10 +55,10 @@ const buttonSizes = {
   lg: "min-h-[52px] px-6 py-3 text-base",
 };
 
-type ButtonVariant = keyof typeof buttonVariants;
-type ButtonSize = keyof typeof buttonSizes;
+export type ButtonVariant = keyof typeof buttonVariants;
+export type ButtonSize = keyof typeof buttonSizes;
 
-type ButtonProps = {
+export type ButtonProps = {
   children: ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -69,21 +71,27 @@ type ButtonProps = {
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> &
   Omit<ComponentPropsWithoutRef<"a">, "children" | "href">;
 
-export function Button({
-  children,
-  variant = "primary",
-  size = "md",
-  href,
-  loading = false,
-  fullWidth = false,
-  leftIcon,
-  rightIcon,
-  className = "",
-  ariaLabel,
-  disabled,
-  type = "button",
-  ...props
-}: ButtonProps) {
+export const Button = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(function Button(
+  {
+    children,
+    variant = "primary",
+    size = "md",
+    href,
+    loading = false,
+    fullWidth = false,
+    leftIcon,
+    rightIcon,
+    className = "",
+    ariaLabel,
+    disabled,
+    type = "button",
+    ...props
+  },
+  ref,
+) {
   const classes = cx(
     buttonBase,
     buttonVariants[variant],
@@ -107,6 +115,7 @@ export function Button({
   if (href) {
     return (
       <a
+        ref={ref as Ref<HTMLAnchorElement>}
         className={classes}
         href={disabled || loading ? undefined : href}
         aria-label={ariaLabel}
@@ -121,6 +130,7 @@ export function Button({
 
   return (
     <button
+      ref={ref as Ref<HTMLButtonElement>}
       className={classes}
       type={type}
       disabled={disabled || loading}
@@ -131,7 +141,7 @@ export function Button({
       {content}
     </button>
   );
-}
+});
 
 /* -------------------------------------------------------------------------------------------------
  * IconButton
@@ -362,21 +372,16 @@ function FieldShell({
 const fieldControlBase =
   "focus-ring min-h-11 w-full radius-md border border-subtle bg-surface-card px-4 py-3 text-primary outline-none transition placeholder:text-placeholder disabled:cursor-not-allowed disabled:bg-surface-base disabled:text-tertiary disabled:opacity-70";
 
-type InputProps = {
+export type InputProps = {
   label?: ReactNode;
   helperText?: ReactNode;
   error?: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export function Input({
-  label,
-  helperText,
-  error,
-  className = "",
-  id,
-  required,
-  ...props
-}: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { label, helperText, error, className = "", id, required, ...props },
+  ref,
+) {
   return (
     <FieldShell
       id={id}
@@ -387,6 +392,7 @@ export function Input({
     >
       {({ id: fieldId, describedBy, invalid }) => (
         <input
+          ref={ref}
           id={fieldId}
           className={cx(
             fieldControlBase,
@@ -401,7 +407,7 @@ export function Input({
       )}
     </FieldShell>
   );
-}
+});
 
 type TextareaProps = {
   label?: ReactNode;
@@ -838,7 +844,27 @@ export function ToastViewport({
  * Modal
  * -----------------------------------------------------------------------------------------------*/
 
-type ModalProps = {
+const focusableElementSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "textarea:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function getFocusableElements(container: HTMLElement | null) {
+  if (!container) return [];
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(focusableElementSelector),
+  ).filter(
+    (element) =>
+      !element.hasAttribute("disabled") &&
+      element.getAttribute("aria-hidden") !== "true",
+  );
+}
+
+export type ModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: ReactNode;
@@ -848,46 +874,98 @@ type ModalProps = {
   closeLabel?: string;
 };
 
-export function Modal({
-  open,
-  onOpenChange,
-  title,
-  description,
-  children,
-  footer,
-  closeLabel = "Close dialog",
-}: ModalProps) {
+export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
+  {
+    open,
+    onOpenChange,
+    title,
+    description,
+    children,
+    footer,
+    closeLabel = "Close dialog",
+  },
+  ref,
+) {
   const titleId = useId();
   const descriptionId = useId();
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
+
+    const previouslyFocusedElement =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusableElements = getFocusableElements(panelRef.current);
+    (focusableElements[0] ?? panelRef.current)?.focus();
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onOpenChange(false);
     };
     document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
+      previouslyFocusedElement?.focus();
     };
   }, [open, onOpenChange]);
+
+  const setPanelRef = (node: HTMLDivElement | null) => {
+    panelRef.current = node;
+    if (typeof ref === "function") {
+      ref(node);
+    } else if (ref) {
+      (ref as MutableRefObject<HTMLDivElement | null>).current = node;
+    }
+  };
+
+  const trapFocus = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Tab") return;
+
+    const focusableElements = getFocusableElements(panelRef.current);
+    if (!focusableElements.length) {
+      event.preventDefault();
+      panelRef.current?.focus();
+      return;
+    }
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+    } else if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  };
 
   if (!open) return null;
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgb(36_23_24/0.45)] p-4"
+      className={cx(
+        "fixed inset-0 z-[60] flex items-center justify-center p-4",
+        overlayBackdropClassName,
+      )}
       role="presentation"
       onMouseDown={() => onOpenChange(false)}
     >
       <div
+        ref={setPanelRef}
         className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-auto radius-xl border border-subtle bg-surface-elevated p-6 shadow-xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
+        tabIndex={-1}
+        onKeyDown={trapFocus}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4">
@@ -919,7 +997,7 @@ export function Modal({
     </div>,
     document.body,
   );
-}
+});
 
 /* -------------------------------------------------------------------------------------------------
  * Tabs
