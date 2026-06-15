@@ -1,45 +1,120 @@
-import type { ReactNode } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  createContext,
+  type ButtonHTMLAttributes,
+  type ComponentPropsWithoutRef,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
+import {
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  Info,
+  Loader2,
+  TriangleAlert,
+  X,
+} from "lucide-react";
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Button
+ * -----------------------------------------------------------------------------------------------*/
 
 const buttonBase =
-  "focus-ring motion-hover-lift inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60 heading-font";
+  "focus-ring heading-font inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-60";
 
 const buttonVariants = {
-  primary: "bg-[#7E1518] text-white hover:bg-[#681114]",
-  gold: "bg-[#D6A13A] text-[#241718] hover:bg-[#c28e28]",
-  soft: "bg-[#F5E7E8] text-[#7E1518] hover:bg-[#eed6d8]",
+  primary:
+    "bg-[var(--mws-color-action-primary-background)] text-[var(--mws-color-action-primary-text)] hover:bg-[var(--mws-color-action-primary-background-hover)]",
+  gold: "bg-[var(--mws-color-action-gold-background)] text-[var(--mws-color-action-gold-text)] hover:bg-[var(--mws-color-action-gold-background-hover)]",
+  soft: "bg-[var(--mws-color-action-soft-background)] text-[var(--mws-color-action-soft-text)] hover:bg-[var(--mws-color-action-soft-background-hover)]",
   outline:
-    "border border-[#7E1518]/25 bg-white text-[#7E1518] hover:bg-[#F5E7E8]",
-  ghost: "text-[#7E1518] hover:bg-[#F5E7E8]",
+    "border border-brand bg-[var(--mws-color-action-secondary-background)] text-[var(--mws-color-action-secondary-text)] hover:bg-[var(--mws-color-action-secondary-background-hover)]",
+  ghost:
+    "text-[var(--mws-color-action-ghost-text)] hover:bg-[var(--mws-color-action-ghost-background-hover)]",
+  destructive:
+    "bg-[var(--mws-color-status-error-text)] text-inverse hover:bg-[color-mix(in_srgb,var(--mws-color-status-error-text)_88%,black)]",
+};
+
+const buttonSizes = {
+  sm: "min-h-9 px-3 py-2 text-sm",
+  md: "min-h-11 px-5 py-3 text-sm",
+  lg: "min-h-[52px] px-6 py-3 text-base",
 };
 
 type ButtonVariant = keyof typeof buttonVariants;
+type ButtonSize = keyof typeof buttonSizes;
 
 type ButtonProps = {
   children: ReactNode;
   variant?: ButtonVariant;
+  size?: ButtonSize;
   href?: string;
-  onClick?: () => void;
-  className?: string;
+  loading?: boolean;
+  fullWidth?: boolean;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   ariaLabel?: string;
-  type?: "button" | "submit" | "reset";
-};
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> &
+  Omit<ComponentPropsWithoutRef<"a">, "children" | "href">;
 
 export function Button({
   children,
   variant = "primary",
+  size = "md",
   href,
-  onClick,
+  loading = false,
+  fullWidth = false,
+  leftIcon,
+  rightIcon,
   className = "",
   ariaLabel,
+  disabled,
   type = "button",
+  ...props
 }: ButtonProps) {
-  const classes = `${buttonBase} ${buttonVariants[variant]} ${className}`;
+  const classes = cx(
+    buttonBase,
+    buttonVariants[variant],
+    buttonSizes[size],
+    !disabled && !loading && "motion-hover-lift",
+    fullWidth && "w-full",
+    className,
+  );
+  const content = (
+    <>
+      {loading ? (
+        <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+      ) : (
+        leftIcon
+      )}
+      <span>{children}</span>
+      {!loading ? rightIcon : null}
+    </>
+  );
 
   if (href) {
     return (
-      <a className={classes} href={href} aria-label={ariaLabel}>
-        {children}
+      <a
+        className={classes}
+        href={disabled || loading ? undefined : href}
+        aria-label={ariaLabel}
+        aria-disabled={disabled || loading || undefined}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {content}
       </a>
     );
   }
@@ -47,30 +122,958 @@ export function Button({
   return (
     <button
       className={classes}
-      onClick={onClick}
       type={type}
+      disabled={disabled || loading}
       aria-label={ariaLabel}
+      aria-busy={loading || undefined}
+      {...props}
     >
-      {children}
+      {content}
     </button>
   );
 }
 
+/* -------------------------------------------------------------------------------------------------
+ * IconButton
+ * -----------------------------------------------------------------------------------------------*/
+
+type IconButtonProps = {
+  icon: ReactNode;
+  label: string;
+  variant?: ButtonVariant;
+  size?: "sm" | "md" | "lg";
+  loading?: boolean;
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "aria-label">;
+
+export function IconButton({
+  icon,
+  label,
+  variant = "ghost",
+  size = "md",
+  loading = false,
+  className = "",
+  disabled,
+  type = "button",
+  ...props
+}: IconButtonProps) {
+  const sizeClasses = {
+    sm: "size-9",
+    md: "size-11",
+    lg: "size-[52px]",
+  };
+
+  return (
+    <button
+      className={cx(
+        buttonBase,
+        buttonVariants[variant],
+        sizeClasses[size],
+        !disabled && !loading && "motion-hover-lift",
+        className,
+      )}
+      type={type}
+      aria-label={label}
+      aria-busy={loading || undefined}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading ? (
+        <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+      ) : (
+        icon
+      )}
+    </button>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Card
+ * -----------------------------------------------------------------------------------------------*/
+
+type CardProps = {
+  children: ReactNode;
+  variant?: "default" | "elevated" | "outlined" | "soft" | "interactive";
+  padding?: "none" | "compact" | "standard" | "spacious";
+  className?: string;
+} & ComponentPropsWithoutRef<"div">;
+
 export function Card({
   children,
+  variant = "default",
+  padding = "standard",
   className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+  ...props
+}: CardProps) {
+  const variants = {
+    default: "border border-subtle bg-surface-card card-shadow",
+    elevated: "border border-subtle bg-surface-elevated shadow-lg",
+    outlined: "border border-subtle bg-surface-card",
+    soft: "border border-subtle bg-surface-base",
+    interactive:
+      "border border-subtle bg-surface-card card-shadow motion-hover-lift cursor-pointer",
+  };
+  const paddings = {
+    none: "p-0",
+    compact: "p-4",
+    standard: "p-6",
+    spacious: "p-8",
+  };
+
   return (
     <div
-      className={`motion-hover-lift rounded-3xl border border-[#eadfda] bg-white p-6 card-shadow ${className}`}
+      className={cx(
+        "radius-xl",
+        variants[variant],
+        paddings[padding],
+        className,
+      )}
+      {...props}
     >
       {children}
     </div>
   );
 }
+
+/* -------------------------------------------------------------------------------------------------
+ * Badge
+ * -----------------------------------------------------------------------------------------------*/
+
+export type BadgeTone =
+  | "burgundy"
+  | "gold"
+  | "rose"
+  | "sage"
+  | "navy"
+  | "sky"
+  | "success"
+  | "warning"
+  | "error"
+  | "info"
+  | "neutral";
+
+type BadgeProps = {
+  children: ReactNode;
+  tone?: BadgeTone;
+  size?: "sm" | "md";
+  className?: string;
+} & ComponentPropsWithoutRef<"span">;
+
+export function Badge({
+  children,
+  tone = "burgundy",
+  size = "sm",
+  className = "",
+  ...props
+}: BadgeProps) {
+  const tones: Record<BadgeTone, string> = {
+    burgundy: "bg-brand-primary-soft text-brand",
+    gold: "bg-status-warning text-status-warning",
+    rose: "bg-status-error text-status-error",
+    sage: "bg-status-success text-status-success",
+    navy: "bg-brand-navy-soft text-brand-navy",
+    sky: "bg-status-info text-status-info",
+    success: "bg-status-success text-status-success",
+    warning: "bg-status-warning text-status-warning",
+    error: "bg-status-error text-status-error",
+    info: "bg-status-info text-status-info",
+    neutral: "bg-status-neutral text-tertiary",
+  };
+  const sizes = {
+    sm: "px-3 py-1 text-xs",
+    md: "px-3.5 py-1.5 text-sm",
+  };
+
+  return (
+    <span
+      className={cx(
+        "heading-font inline-flex items-center gap-1 radius-full font-bold",
+        tones[tone],
+        sizes[size],
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </span>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Forms
+ * -----------------------------------------------------------------------------------------------*/
+
+type FieldShellProps = {
+  id?: string;
+  label?: ReactNode;
+  helperText?: ReactNode;
+  error?: ReactNode;
+  required?: boolean;
+  children: (field: {
+    id: string;
+    describedBy?: string;
+    invalid: boolean;
+  }) => ReactNode;
+};
+
+function FieldShell({
+  id,
+  label,
+  helperText,
+  error,
+  required,
+  children,
+}: FieldShellProps) {
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
+  const helperId = helperText ? `${fieldId}-helper` : undefined;
+  const errorId = error ? `${fieldId}-error` : undefined;
+  const describedBy =
+    [helperId, errorId].filter(Boolean).join(" ") || undefined;
+
+  return (
+    <div className="grid gap-2">
+      {label ? (
+        <label
+          className="heading-font text-sm font-bold text-primary"
+          htmlFor={fieldId}
+        >
+          {label}{" "}
+          {required ? <span className="text-status-error">*</span> : null}
+        </label>
+      ) : null}
+      {children({ id: fieldId, describedBy, invalid: Boolean(error) })}
+      {helperText ? (
+        <p id={helperId} className="text-sm leading-5 text-tertiary">
+          {helperText}
+        </p>
+      ) : null}
+      {error ? (
+        <p
+          id={errorId}
+          className="text-sm font-semibold leading-5 text-status-error"
+        >
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+const fieldControlBase =
+  "focus-ring min-h-11 w-full radius-md border border-subtle bg-surface-card px-4 py-3 text-primary outline-none transition placeholder:text-placeholder disabled:cursor-not-allowed disabled:bg-surface-base disabled:text-tertiary disabled:opacity-70";
+
+type InputProps = {
+  label?: ReactNode;
+  helperText?: ReactNode;
+  error?: ReactNode;
+} & InputHTMLAttributes<HTMLInputElement>;
+
+export function Input({
+  label,
+  helperText,
+  error,
+  className = "",
+  id,
+  required,
+  ...props
+}: InputProps) {
+  return (
+    <FieldShell
+      id={id}
+      label={label}
+      helperText={helperText}
+      error={error}
+      required={required}
+    >
+      {({ id: fieldId, describedBy, invalid }) => (
+        <input
+          id={fieldId}
+          className={cx(
+            fieldControlBase,
+            invalid && "border-status-error",
+            className,
+          )}
+          aria-describedby={describedBy}
+          aria-invalid={invalid || undefined}
+          required={required}
+          {...props}
+        />
+      )}
+    </FieldShell>
+  );
+}
+
+type TextareaProps = {
+  label?: ReactNode;
+  helperText?: ReactNode;
+  error?: ReactNode;
+} & TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+export function Textarea({
+  label,
+  helperText,
+  error,
+  className = "",
+  id,
+  required,
+  rows = 4,
+  ...props
+}: TextareaProps) {
+  return (
+    <FieldShell
+      id={id}
+      label={label}
+      helperText={helperText}
+      error={error}
+      required={required}
+    >
+      {({ id: fieldId, describedBy, invalid }) => (
+        <textarea
+          id={fieldId}
+          rows={rows}
+          className={cx(
+            fieldControlBase,
+            "resize-y",
+            invalid && "border-status-error",
+            className,
+          )}
+          aria-describedby={describedBy}
+          aria-invalid={invalid || undefined}
+          required={required}
+          {...props}
+        />
+      )}
+    </FieldShell>
+  );
+}
+
+type SelectOption = {
+  label: string;
+  value: string;
+  disabled?: boolean;
+};
+
+type SelectProps = {
+  label?: ReactNode;
+  helperText?: ReactNode;
+  error?: ReactNode;
+  placeholder?: string;
+  options: SelectOption[];
+} & SelectHTMLAttributes<HTMLSelectElement>;
+
+export function Select({
+  label,
+  helperText,
+  error,
+  placeholder,
+  options,
+  className = "",
+  id,
+  required,
+  ...props
+}: SelectProps) {
+  return (
+    <FieldShell
+      id={id}
+      label={label}
+      helperText={helperText}
+      error={error}
+      required={required}
+    >
+      {({ id: fieldId, describedBy, invalid }) => (
+        <select
+          id={fieldId}
+          className={cx(
+            fieldControlBase,
+            "appearance-auto",
+            invalid && "border-status-error",
+            className,
+          )}
+          aria-describedby={describedBy}
+          aria-invalid={invalid || undefined}
+          required={required}
+          {...props}
+        >
+          {placeholder ? <option value="">{placeholder}</option> : null}
+          {options.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+      )}
+    </FieldShell>
+  );
+}
+
+type CheckboxProps = {
+  label: ReactNode;
+  description?: ReactNode;
+  error?: ReactNode;
+} & InputHTMLAttributes<HTMLInputElement>;
+
+export function Checkbox({
+  label,
+  description,
+  error,
+  className = "",
+  id,
+  ...props
+}: CheckboxProps) {
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
+  const descriptionId = description ? `${fieldId}-description` : undefined;
+  const errorId = error ? `${fieldId}-error` : undefined;
+  const describedBy =
+    [descriptionId, errorId].filter(Boolean).join(" ") || undefined;
+
+  return (
+    <div className="grid gap-2">
+      <label className="flex cursor-pointer items-start gap-3 text-primary">
+        <input
+          id={fieldId}
+          type="checkbox"
+          className={cx(
+            "focus-ring mt-1 size-5 shrink-0 radius-sm accent-[var(--mws-color-brand-primary)]",
+            className,
+          )}
+          aria-describedby={describedBy}
+          aria-invalid={Boolean(error) || undefined}
+          {...props}
+        />
+        <span>
+          <span className="heading-font block text-sm font-bold">{label}</span>
+          {description ? (
+            <span
+              id={descriptionId}
+              className="mt-1 block text-sm leading-5 text-tertiary"
+            >
+              {description}
+            </span>
+          ) : null}
+        </span>
+      </label>
+      {error ? (
+        <p
+          id={errorId}
+          className="text-sm font-semibold leading-5 text-status-error"
+        >
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+type RadioOption = {
+  label: ReactNode;
+  value: string;
+  description?: ReactNode;
+  disabled?: boolean;
+};
+
+type RadioGroupProps = {
+  label: ReactNode;
+  name: string;
+  options: RadioOption[];
+  value?: string;
+  defaultValue?: string;
+  error?: ReactNode;
+  helperText?: ReactNode;
+  onValueChange?: (value: string) => void;
+};
+
+export function RadioGroup({
+  label,
+  name,
+  options,
+  value,
+  defaultValue,
+  error,
+  helperText,
+  onValueChange,
+}: RadioGroupProps) {
+  const groupId = useId();
+  const helperId = helperText ? `${groupId}-helper` : undefined;
+  const errorId = error ? `${groupId}-error` : undefined;
+  const describedBy =
+    [helperId, errorId].filter(Boolean).join(" ") || undefined;
+
+  return (
+    <fieldset className="grid gap-3" aria-describedby={describedBy}>
+      <legend className="heading-font text-sm font-bold text-primary">
+        {label}
+      </legend>
+      {helperText ? (
+        <p id={helperId} className="text-sm leading-5 text-tertiary">
+          {helperText}
+        </p>
+      ) : null}
+      <div className="grid gap-3">
+        {options.map((option) => {
+          const id = `${groupId}-${option.value}`;
+          return (
+            <label
+              key={option.value}
+              className={cx(
+                "flex cursor-pointer items-start gap-3 radius-lg border border-subtle bg-surface-card p-4 transition",
+                option.disabled && "cursor-not-allowed opacity-60",
+              )}
+            >
+              <input
+                id={id}
+                className="focus-ring mt-1 size-5 shrink-0 accent-[var(--mws-color-brand-primary)]"
+                type="radio"
+                name={name}
+                value={option.value}
+                checked={value ? value === option.value : undefined}
+                defaultChecked={
+                  defaultValue ? defaultValue === option.value : undefined
+                }
+                disabled={option.disabled}
+                onChange={(event) => onValueChange?.(event.target.value)}
+              />
+              <span>
+                <span className="heading-font block text-sm font-bold text-primary">
+                  {option.label}
+                </span>
+                {option.description ? (
+                  <span className="mt-1 block text-sm leading-5 text-tertiary">
+                    {option.description}
+                  </span>
+                ) : null}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+      {error ? (
+        <p
+          id={errorId}
+          className="text-sm font-semibold leading-5 text-status-error"
+        >
+          {error}
+        </p>
+      ) : null}
+    </fieldset>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Alert
+ * -----------------------------------------------------------------------------------------------*/
+
+type AlertTone = "info" | "success" | "warning" | "error" | "neutral";
+
+type AlertProps = {
+  tone?: AlertTone;
+  title?: ReactNode;
+  children: ReactNode;
+  icon?: ReactNode;
+  className?: string;
+} & ComponentPropsWithoutRef<"div">;
+
+export function Alert({
+  tone = "info",
+  title,
+  children,
+  icon,
+  className = "",
+  ...props
+}: AlertProps) {
+  const tones: Record<AlertTone, string> = {
+    info: "border-status-info bg-status-info text-status-info",
+    success: "border-status-success bg-status-success text-status-success",
+    warning: "border-status-warning bg-status-warning text-status-warning",
+    error: "border-status-error bg-status-error text-status-error",
+    neutral: "border-subtle bg-surface-base text-secondary",
+  };
+  const defaultIcons: Record<AlertTone, ReactNode> = {
+    info: <Info aria-hidden="true" className="size-5" />,
+    success: <CheckCircle2 aria-hidden="true" className="size-5" />,
+    warning: <TriangleAlert aria-hidden="true" className="size-5" />,
+    error: <AlertCircle aria-hidden="true" className="size-5" />,
+    neutral: <Info aria-hidden="true" className="size-5" />,
+  };
+
+  return (
+    <div
+      className={cx("flex gap-3 radius-lg border p-4", tones[tone], className)}
+      role={tone === "error" ? "alert" : "status"}
+      {...props}
+    >
+      <div className="mt-0.5 shrink-0">{icon ?? defaultIcons[tone]}</div>
+      <div>
+        {title ? <p className="heading-font font-bold">{title}</p> : null}
+        <div className={cx("text-sm leading-6", title && "mt-1")}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Toast
+ * -----------------------------------------------------------------------------------------------*/
+
+type ToastTone = "info" | "success" | "warning" | "error";
+
+type ToastItem = {
+  id: string;
+  title: string;
+  description?: string;
+  tone: ToastTone;
+};
+
+type ToastContextValue = {
+  notify: (toast: Omit<ToastItem, "id">) => string;
+  dismiss: (id: string) => void;
+};
+
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  const value = useMemo<ToastContextValue>(() => {
+    return {
+      notify: (toast) => {
+        const id = crypto.randomUUID();
+        setToasts((current) => [...current, { ...toast, id }]);
+        window.setTimeout(() => {
+          setToasts((current) => current.filter((item) => item.id !== id));
+        }, 5000);
+        return id;
+      },
+      dismiss: (id) => {
+        setToasts((current) => current.filter((item) => item.id !== id));
+      },
+    };
+  }, []);
+
+  return (
+    <ToastContext.Provider value={value}>
+      {children}
+      <ToastViewport toasts={toasts} onDismiss={value.dismiss} />
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error("useToast must be used inside ToastProvider");
+  }
+  return context;
+}
+
+export function Toast({
+  toast,
+  onDismiss,
+}: {
+  toast: ToastItem;
+  onDismiss: (id: string) => void;
+}) {
+  const badgeTone: Record<ToastTone, BadgeTone> = {
+    info: "info",
+    success: "success",
+    warning: "warning",
+    error: "error",
+  };
+
+  return (
+    <div
+      className="radius-lg border border-subtle bg-surface-elevated p-4 shadow-lg"
+      role={toast.tone === "error" ? "alert" : "status"}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <Badge tone={badgeTone[toast.tone]}>{toast.tone}</Badge>
+          <p className="heading-font mt-2 font-bold text-primary">
+            {toast.title}
+          </p>
+          {toast.description ? (
+            <p className="mt-1 text-sm leading-5 text-tertiary">
+              {toast.description}
+            </p>
+          ) : null}
+        </div>
+        <IconButton
+          icon={<X className="size-4" />}
+          label="Dismiss notification"
+          size="sm"
+          onClick={() => onDismiss(toast.id)}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function ToastViewport({
+  toasts,
+  onDismiss,
+}: {
+  toasts: ToastItem[];
+  onDismiss: (id: string) => void;
+}) {
+  return (
+    <div
+      className="fixed bottom-4 right-4 z-[70] grid w-[min(24rem,calc(100vw-2rem))] gap-3"
+      aria-live="polite"
+      aria-relevant="additions removals"
+    >
+      {toasts.map((toast) => (
+        <Toast key={toast.id} toast={toast} onDismiss={onDismiss} />
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Modal
+ * -----------------------------------------------------------------------------------------------*/
+
+type ModalProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
+  footer?: ReactNode;
+  closeLabel?: string;
+};
+
+export function Modal({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  footer,
+  closeLabel = "Close dialog",
+}: ModalProps) {
+  const titleId = useId();
+  const descriptionId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onOpenChange(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open, onOpenChange]);
+
+  if (!open) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgb(36_23_24/0.45)] p-4"
+      role="presentation"
+      onMouseDown={() => onOpenChange(false)}
+    >
+      <div
+        className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-auto radius-xl border border-subtle bg-surface-elevated p-6 shadow-xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={description ? descriptionId : undefined}
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2
+              id={titleId}
+              className="heading-font text-2xl font-bold text-primary"
+            >
+              {title}
+            </h2>
+            {description ? (
+              <p id={descriptionId} className="mt-2 leading-6 text-tertiary">
+                {description}
+              </p>
+            ) : null}
+          </div>
+          <IconButton
+            icon={<X className="size-4" />}
+            label={closeLabel}
+            size="sm"
+            onClick={() => onOpenChange(false)}
+          />
+        </div>
+        <div className="mt-6">{children}</div>
+        {footer ? (
+          <div className="mt-6 flex flex-wrap justify-end gap-3">{footer}</div>
+        ) : null}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Tabs
+ * -----------------------------------------------------------------------------------------------*/
+
+type TabItem = {
+  id: string;
+  label: ReactNode;
+  content: ReactNode;
+  disabled?: boolean;
+};
+
+type TabsProps = {
+  tabs: TabItem[];
+  defaultValue?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  label?: string;
+};
+
+export function Tabs({
+  tabs,
+  defaultValue,
+  value,
+  onValueChange,
+  label = "Section tabs",
+}: TabsProps) {
+  const [internalValue, setInternalValue] = useState(
+    defaultValue ?? tabs[0]?.id,
+  );
+  const selectedValue = value ?? internalValue;
+  const selectedTab = tabs.find((tab) => tab.id === selectedValue) ?? tabs[0];
+
+  const selectTab = (id: string) => {
+    setInternalValue(id);
+    onValueChange?.(id);
+  };
+
+  return (
+    <div>
+      <div
+        className="flex flex-wrap gap-2 border-b border-subtle"
+        role="tablist"
+        aria-label={label}
+      >
+        {tabs.map((tab) => {
+          const selected = tab.id === selectedTab?.id;
+          return (
+            <button
+              key={tab.id}
+              className={cx(
+                "focus-ring heading-font -mb-px border-b-2 px-4 py-3 text-sm font-bold transition",
+                selected
+                  ? "border-[var(--mws-color-brand-primary)] text-brand"
+                  : "border-transparent text-tertiary hover:text-brand",
+                tab.disabled && "cursor-not-allowed opacity-50",
+              )}
+              type="button"
+              role="tab"
+              aria-selected={selected}
+              aria-controls={`${tab.id}-panel`}
+              id={`${tab.id}-tab`}
+              disabled={tab.disabled}
+              onClick={() => selectTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+      {selectedTab ? (
+        <div
+          id={`${selectedTab.id}-panel`}
+          role="tabpanel"
+          aria-labelledby={`${selectedTab.id}-tab`}
+          className="pt-5"
+        >
+          {selectedTab.content}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Skeleton
+ * -----------------------------------------------------------------------------------------------*/
+
+export function Skeleton({
+  className = "",
+  ...props
+}: ComponentPropsWithoutRef<"div">) {
+  return (
+    <div
+      className={cx(
+        "animate-pulse radius-md bg-[color-mix(in_srgb,var(--mws-color-border-subtle)_70%,transparent)]",
+        className,
+      )}
+      aria-hidden="true"
+      {...props}
+    />
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * EmptyState
+ * -----------------------------------------------------------------------------------------------*/
+
+type EmptyStateProps = {
+  icon?: ReactNode;
+  title: ReactNode;
+  description: ReactNode;
+  action?: ReactNode;
+  secondaryAction?: ReactNode;
+  className?: string;
+};
+
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  secondaryAction,
+  className = "",
+}: EmptyStateProps) {
+  return (
+    <div
+      className={cx(
+        "radius-xl border border-dashed border-status-warning bg-status-warning p-6 text-center",
+        className,
+      )}
+    >
+      {icon ? (
+        <div className="mx-auto mb-4 flex size-12 items-center justify-center radius-full bg-surface-card text-brand-gold">
+          {icon}
+        </div>
+      ) : null}
+      <h3 className="heading-font text-lg font-bold text-brand">{title}</h3>
+      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-secondary">
+        {description}
+      </p>
+      {action || secondaryAction ? (
+        <div className="mt-5 flex flex-wrap justify-center gap-3">
+          {action}
+          {secondaryAction}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Existing documentation helpers
+ * -----------------------------------------------------------------------------------------------*/
 
 export function SectionHeader({
   eyebrow,
@@ -86,18 +1089,26 @@ export function SectionHeader({
   return (
     <div className="mx-auto mb-10 max-w-3xl text-center">
       {eyebrow ? (
-        <p className="heading-font mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#D6A13A]">
+        <p className="heading-font mb-3 text-sm font-bold uppercase tracking-[0.2em] text-brand-gold">
           {eyebrow}
         </p>
       ) : null}
       <h2
-        className={`heading-font text-3xl font-extrabold tracking-tight md:text-4xl ${inverse ? "text-white" : "text-[#7E1518]"}`}
+        className={cx(
+          "heading-font text-3xl font-extrabold tracking-tight md:text-4xl",
+          inverse ? "text-inverse" : "text-brand",
+        )}
       >
         {title}
       </h2>
       {description ? (
         <p
-          className={`mt-4 text-lg leading-8 ${inverse ? "text-white/75" : "text-[#5d4b4c]"}`}
+          className={cx(
+            "mt-4 text-lg leading-8",
+            inverse
+              ? "text-[color-mix(in_srgb,var(--mws-color-text-inverse)_75%,transparent)]"
+              : "text-secondary",
+          )}
         >
           {description}
         </p>
@@ -106,75 +1117,47 @@ export function SectionHeader({
   );
 }
 
-export function Badge({
-  children,
-  tone = "burgundy",
-}: {
-  children: ReactNode;
-  tone?: "burgundy" | "gold" | "rose" | "sage" | "navy" | "sky";
-}) {
-  const tones = {
-    burgundy: "bg-[#F5E7E8] text-[#7E1518]",
-    gold: "bg-[#FBF2DF] text-[#7a5311]",
-    rose: "bg-[#F8EAEB] text-[#B94A4E]",
-    sage: "bg-[#EDF3EB] text-[#486142]",
-    navy: "bg-[#E9EDF6] text-[#1F2A44]",
-    sky: "bg-[#EFF8FE] text-[#25638e]",
-  };
-
-  return (
-    <span
-      className={`heading-font inline-flex rounded-full px-3 py-1 text-xs font-bold ${tones[tone]}`}
-    >
-      {children}
-    </span>
-  );
-}
-
 export function InputPreview() {
   return (
-    <div className="space-y-3">
-      <label
-        className="heading-font text-sm font-bold text-[#241718]"
-        htmlFor="school-email"
-      >
-        School email
-      </label>
-      <input
-        id="school-email"
-        className="focus-ring w-full rounded-2xl border border-[#eadfda] bg-white px-4 py-3 text-[#241718] placeholder:text-[#9b898a]"
-        placeholder="name@millennia21.id"
-      />
-      <p className="text-sm text-[#6f6061]">
-        Use clear helper text so users know what to do next.
-      </p>
-    </div>
+    <Input
+      id="school-email"
+      label="School email"
+      placeholder="name@millennia21.id"
+      helperText="Use clear helper text so users know what to do next."
+    />
   );
 }
 
 export function ProgressBar({
   value,
   tone = "burgundy",
+  label = "Progress",
 }: {
   value: number;
   tone?: "burgundy" | "gold" | "sage" | "rose" | "navy";
+  label?: string;
 }) {
   const tones = {
-    burgundy: "bg-[#7E1518]",
-    gold: "bg-[#D6A13A]",
-    sage: "bg-[#6F8B6A]",
-    rose: "bg-[#B94A4E]",
-    navy: "bg-[#1F2A44]",
+    burgundy: "bg-brand-primary",
+    gold: "bg-brand-gold",
+    sage: "bg-brand-sage",
+    rose: "bg-brand-rose",
+    navy: "bg-brand-navy",
   };
+  const normalizedValue = Math.min(100, Math.max(0, value));
 
   return (
     <div
-      className="h-3 overflow-hidden rounded-full bg-[#f1e7e2]"
-      aria-label={`${value}% complete`}
+      className="h-3 overflow-hidden radius-full bg-surface-sunken"
+      role="progressbar"
+      aria-label={label}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={normalizedValue}
     >
       <div
-        className={`motion-progress-grow h-full rounded-full ${tones[tone]}`}
-        style={{ width: `${value}%` }}
+        className={cx("motion-progress-grow h-full radius-full", tones[tone])}
+        style={{ width: `${normalizedValue}%` }}
       />
     </div>
   );
@@ -182,25 +1165,18 @@ export function ProgressBar({
 
 export function EmptyStatePreview() {
   return (
-    <div className="rounded-3xl border border-dashed border-[#D6A13A]/70 bg-[#FBF2DF]/60 p-6 text-center">
-      <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-white text-[#D6A13A]">
-        <CheckCircle2 size={24} />
-      </div>
-      <h3 className="heading-font text-lg font-bold text-[#7E1518]">
-        No reflections yet
-      </h3>
-      <p className="mt-2 text-sm leading-6 text-[#5d4b4c]">
-        Once students begin sharing their check-ins, their wellbeing patterns
-        will appear here.
-      </p>
-    </div>
+    <EmptyState
+      icon={<CheckCircle2 size={24} />}
+      title="No reflections yet"
+      description="Once students begin sharing their check-ins, their wellbeing patterns will appear here."
+    />
   );
 }
 
 export function LinkButton({ children }: { children: ReactNode }) {
   return (
     <a
-      className="heading-font inline-flex items-center gap-2 text-sm font-bold text-[#7E1518]"
+      className="heading-font inline-flex items-center gap-2 text-sm font-bold text-link"
       href="#implementation"
     >
       {children} <ArrowRight size={16} />

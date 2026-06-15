@@ -16,42 +16,50 @@ export const colors = [
   {
     name: "MWS Burgundy",
     hex: "#7E1518",
+    cssVar: "var(--mws-color-brand-primary)",
     role: "Primary identity, headers, main buttons, official moments",
   },
   {
     name: "MWS White",
     hex: "#FFFFFF",
+    cssVar: "var(--mws-color-surface-card)",
     role: "Main background, space, readability",
     bordered: true,
   },
   {
     name: "Happiness Gold",
     hex: "#D6A13A",
+    cssVar: "var(--mws-color-brand-gold)",
     role: "Highlights, joyful accents, celebration moments",
   },
   {
     name: "Deep Charcoal",
     hex: "#241718",
+    cssVar: "var(--mws-color-text-primary)",
     role: "Main text instead of pure black",
   },
   {
     name: "Compassion Rose",
     hex: "#B94A4E",
+    cssVar: "var(--mws-color-brand-rose)",
     role: "SEL, kindness, compassion, wellbeing",
   },
   {
     name: "Goodness Sage",
     hex: "#6F8B6A",
+    cssVar: "var(--mws-color-brand-sage)",
     role: "Nature, sustainability, growth, intervention",
   },
   {
     name: "Truth Navy",
     hex: "#1F2A44",
+    cssVar: "var(--mws-color-brand-navy)",
     role: "Academics, thinking, trust, evidence",
   },
   {
     name: "Millennia Sky",
     hex: "#B8DDF8",
+    cssVar: "var(--mws-color-brand-sky)",
     role: "Calm, reflection, child-centered softness",
   },
 ];
@@ -210,7 +218,7 @@ export const productExamples = [
       "QuizStatusBadge",
       "LibraryShelf",
     ],
-    accent: "#B8DDF8",
+    accent: "var(--mws-color-brand-sky)",
   },
   {
     name: "MWS Daily Check-in",
@@ -224,7 +232,7 @@ export const productExamples = [
       "MoodHistoryCard",
       "CompassionPrompt",
     ],
-    accent: "#B94A4E",
+    accent: "var(--mws-color-brand-rose)",
   },
   {
     name: "MWS MTSS System",
@@ -238,7 +246,7 @@ export const productExamples = [
       "StrategyCard",
       "ReviewTimeline",
     ],
-    accent: "#6F8B6A",
+    accent: "var(--mws-color-brand-sage)",
   },
   {
     name: "MWS Proofpoint",
@@ -252,7 +260,7 @@ export const productExamples = [
       "ApprovalFlow",
       "PerformanceBadge",
     ],
-    accent: "#1F2A44",
+    accent: "var(--mws-color-brand-navy)",
   },
 ];
 
