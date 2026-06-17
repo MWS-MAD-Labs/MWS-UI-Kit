@@ -46,5 +46,5 @@ jobs:
         run: npm run storybook:build
 
       - name: Check Changesets status
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'changeset-release/')
         run: npm run changeset:status -- --since=origin/main
