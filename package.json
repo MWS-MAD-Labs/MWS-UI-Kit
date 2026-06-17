@@ -33,7 +33,7 @@
     "changeset": "changeset",
     "changeset:status": "changeset status",
     "version-packages": "changeset version",
-    "release": "changeset publish --provenance",
+    "release": "changeset publish",
     "docker:build": "docker build -t mws-ui-kit:latest .",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
