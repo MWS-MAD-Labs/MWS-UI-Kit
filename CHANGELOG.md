@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- b1cad31: Add a public API barrel, release governance, ref-forwarding Button/Input primitives, Modal focus trapping, shared backdrop class tokens, a packaged stylesheet export, and consumer-focused documentation.
+
 All notable changes to MWS UI Kit will be documented in this file.
 
 This project follows [Semantic Versioning](https://semver.org/) and is governed by Changesets. See `docs/semver-policy.md` for what counts as a major, minor, or patch change in this UI kit.
