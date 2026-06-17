@@ -27,6 +27,7 @@ This UI kit is optimized for AI coding agents as a primary consumer. Start with 
 - [`docs/AI_AGENT_GUIDE.md`](docs/AI_AGENT_GUIDE.md) — concise read order, decision workflow, do/don't rules, copy guidance, and accessibility checklist for AI agents.
 - [`llms.txt`](llms.txt) — machine-readable repository map and canonical rules.
 - [`docs/DEVELOPER_GUIDELINES.md`](docs/DEVELOPER_GUIDELINES.md) — full implementation rules, product-specific guidance, accessibility expectations, and contribution workflow.
+- [`docs/DataTable.md`](docs/DataTable.md) — `DataTable` usage notes, including opt-in virtualization and limitations.
 
 ## Included in this first version
 

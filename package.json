@@ -32,6 +32,7 @@
     "docker:down": "docker compose down"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.14.3",
     "lucide-react": "latest"
   },
   "peerDependencies": {
