@@ -90,7 +90,7 @@ export function AIChatInterface({
         {reviewBanner ? <div className="mt-4">{reviewBanner}</div> : null}
       </div>
 
-      <div className="max-h-[34rem] min-h-80 overflow-y-auto p-5">
+      <div className="max-h-136 min-h-80 overflow-y-auto p-5">
         {messages.length ? (
           <div className="grid gap-4">
             {messages.map((message) => (
@@ -143,7 +143,7 @@ export function AIChatMessage({ message }: { message: AIMessage }) {
     <article
       className={cx(
         "flex gap-3",
-        message.role === "user" && "flex-row-reverse text-right",
+        message.role === "user" && "flex-row-reverse text-right"
       )}
     >
       <div
@@ -151,7 +151,7 @@ export function AIChatMessage({ message }: { message: AIMessage }) {
           "flex size-9 shrink-0 items-center justify-center radius-full",
           isAssistant || isSystem
             ? "bg-brand-primary-soft text-brand"
-            : "bg-brand-navy-soft text-brand-navy",
+            : "bg-brand-navy-soft text-brand-navy"
         )}
       >
         {isAssistant || isSystem ? (
@@ -166,8 +166,8 @@ export function AIChatMessage({ message }: { message: AIMessage }) {
           isSystem
             ? "border-status-warning bg-status-warning text-status-warning"
             : isAssistant
-              ? "border-subtle bg-surface-card text-primary"
-              : "border-brand bg-brand-primary-soft text-brand",
+            ? "border-subtle bg-surface-card text-primary"
+            : "border-brand bg-brand-primary-soft text-brand"
         )}
       >
         <div className="text-sm leading-6">{message.content}</div>
@@ -186,7 +186,7 @@ export function AIChatMessage({ message }: { message: AIMessage }) {
                 <Badge key={citation.label} tone="neutral">
                   {citation.label}
                 </Badge>
-              ),
+              )
             )}
           </div>
         ) : null}
@@ -254,7 +254,7 @@ export function AIPromptInput({
         <p
           className={cx(
             "text-xs",
-            remaining < 100 ? "text-status-warning" : "text-tertiary",
+            remaining < 100 ? "text-status-warning" : "text-tertiary"
           )}
         >
           {remaining} characters remaining · Press Cmd/Ctrl + Enter to send
@@ -343,7 +343,7 @@ export function AIResponseCard({
               <Badge key={citation.label} tone="neutral">
                 {citation.label}
               </Badge>
-            ),
+            )
           )}
         </div>
       ) : null}
@@ -424,10 +424,10 @@ export function PromptTemplatePicker({
         new Set(
           templates
             .map((template) => template.category)
-            .filter((category): category is string => Boolean(category)),
-        ),
+            .filter((category): category is string => Boolean(category))
+        )
       ),
-    [templates],
+    [templates]
   );
   const [category, setCategory] = useState<string>("all");
   const visibleTemplates =
@@ -453,7 +453,7 @@ export function PromptTemplatePicker({
                 "focus-ring heading-font radius-full px-3 py-1.5 text-xs font-bold",
                 category === "all"
                   ? "bg-brand-primary text-inverse"
-                  : "bg-surface-base text-secondary",
+                  : "bg-surface-base text-secondary"
               )}
               type="button"
               onClick={() => setCategory("all")}
@@ -467,7 +467,7 @@ export function PromptTemplatePicker({
                   "focus-ring heading-font radius-full px-3 py-1.5 text-xs font-bold",
                   category === item
                     ? "bg-brand-primary text-inverse"
-                    : "bg-surface-base text-secondary",
+                    : "bg-surface-base text-secondary"
                 )}
                 type="button"
                 onClick={() => setCategory(item)}
@@ -488,7 +488,7 @@ export function PromptTemplatePicker({
                 "focus-ring flex gap-3 radius-xl border p-4 text-left transition hover:bg-surface-base",
                 selected
                   ? "border-brand bg-brand-primary-soft"
-                  : "border-subtle bg-surface-card",
+                  : "border-subtle bg-surface-card"
               )}
               type="button"
               aria-pressed={selected}
@@ -604,7 +604,7 @@ export function GeneratedContentReview({
                 className="flex items-start gap-3 radius-lg border border-subtle bg-surface-card p-3"
               >
                 <input
-                  className="focus-ring mt-1 size-4 accent-[var(--mws-color-brand-primary)]"
+                  className="focus-ring mt-1 size-4 accent-(--mws-color-brand-primary)"
                   type="checkbox"
                   checked={item.checked}
                   onChange={(event) =>

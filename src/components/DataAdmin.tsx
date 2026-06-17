@@ -98,7 +98,7 @@ export function DataTable<T>({
       const compare = String(aValue ?? "").localeCompare(
         String(bValue ?? ""),
         undefined,
-        { numeric: true },
+        { numeric: true }
       );
       return sort.direction === "asc" ? compare : -compare;
     });
@@ -114,12 +114,12 @@ export function DataTable<T>({
     if (!selectable || !onSelectedRowIdsChange || !selectedRowIds) return;
     if (allSelected) {
       onSelectedRowIdsChange(
-        selectedRowIds.filter((id) => !allVisibleRowIds.includes(id)),
+        selectedRowIds.filter((id) => !allVisibleRowIds.includes(id))
       );
       return;
     }
     onSelectedRowIdsChange(
-      Array.from(new Set([...selectedRowIds, ...allVisibleRowIds])),
+      Array.from(new Set([...selectedRowIds, ...allVisibleRowIds]))
     );
   };
 
@@ -128,7 +128,7 @@ export function DataTable<T>({
     onSelectedRowIdsChange(
       selectedRowIds.includes(id)
         ? selectedRowIds.filter((item) => item !== id)
-        : [...selectedRowIds, id],
+        : [...selectedRowIds, id]
     );
   };
 
@@ -158,14 +158,14 @@ export function DataTable<T>({
   return (
     <Card padding="none" className="overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[48rem] border-collapse text-left">
+        <table className="w-full min-w-3xl border-collapse text-left">
           {caption ? <caption className="sr-only">{caption}</caption> : null}
           <thead className="border-b border-subtle bg-surface-base">
             <tr>
               {selectable ? (
                 <th className="w-12 px-4 py-3">
                   <input
-                    className="focus-ring size-4 accent-[var(--mws-color-brand-primary)]"
+                    className="focus-ring size-4 accent-(--mws-color-brand-primary)"
                     type="checkbox"
                     aria-label="Select all rows"
                     checked={allSelected}
@@ -182,7 +182,7 @@ export function DataTable<T>({
                       "heading-font whitespace-nowrap px-4 py-3 text-xs font-extrabold uppercase tracking-wide text-tertiary",
                       column.align === "right" && "text-right",
                       column.align === "center" && "text-center",
-                      column.hideOnMobile && "hidden md:table-cell",
+                      column.hideOnMobile && "hidden md:table-cell"
                     )}
                     style={{ width: column.width }}
                     scope="col"
@@ -214,7 +214,7 @@ export function DataTable<T>({
               ) : null}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[var(--mws-color-border-subtle)]">
+          <tbody className="divide-y divide-(--mws-color-border-subtle)">
             {sortedData.map((row, index) => {
               const rowId = getRowId(row, index);
               return (
@@ -225,7 +225,7 @@ export function DataTable<T>({
                   {selectable ? (
                     <td className="px-4 py-3">
                       <input
-                        className="focus-ring size-4 accent-[var(--mws-color-brand-primary)]"
+                        className="focus-ring size-4 accent-(--mws-color-brand-primary)"
                         type="checkbox"
                         aria-label={`Select row ${index + 1}`}
                         checked={selectedRowIds?.includes(rowId) ?? false}
@@ -237,10 +237,10 @@ export function DataTable<T>({
                     const value = column.cell
                       ? column.cell(row)
                       : typeof column.accessor === "function"
-                        ? column.accessor(row)
-                        : column.accessor
-                          ? (row[column.accessor] as ReactNode)
-                          : null;
+                      ? column.accessor(row)
+                      : column.accessor
+                      ? (row[column.accessor] as ReactNode)
+                      : null;
                     return (
                       <td
                         key={column.id}
@@ -249,7 +249,7 @@ export function DataTable<T>({
                           "text-primary",
                           column.align === "right" && "text-right",
                           column.align === "center" && "text-center",
-                          column.hideOnMobile && "hidden md:table-cell",
+                          column.hideOnMobile && "hidden md:table-cell"
                         )}
                       >
                         {value}
@@ -471,7 +471,7 @@ export function MetricCard({
           <div
             className={cx(
               "flex size-11 items-center justify-center radius-lg",
-              toneClasses[tone],
+              toneClasses[tone]
             )}
           >
             {icon}
@@ -488,8 +488,8 @@ export function MetricCard({
               trend.direction === "down"
                 ? "warning"
                 : trend.direction === "up"
-                  ? "success"
-                  : "neutral"
+                ? "success"
+                : "neutral"
             }
           >
             {trend.value}
@@ -578,7 +578,7 @@ export function AuditLog({ items }: { items: AuditLogItem[] }) {
           A transparent history of important changes.
         </p>
       </div>
-      <ol className="divide-y divide-[var(--mws-color-border-subtle)]">
+      <ol className="divide-y divide-(--mws-color-border-subtle)">
         {items.map((item) => (
           <li
             key={item.id}
@@ -645,7 +645,7 @@ export function ActivityFeed({
             <span
               className={cx(
                 "mt-1 flex size-9 shrink-0 items-center justify-center radius-full",
-                toneClasses[item.tone ?? "neutral"],
+                toneClasses[item.tone ?? "neutral"]
               )}
             >
               {item.icon ?? <Circle className="size-3" fill="currentColor" />}
@@ -720,13 +720,13 @@ export function ApprovalFlow({
           aria-hidden="true"
         />
       </div>
-      <ol className="relative grid gap-5 before:absolute before:left-5 before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-[var(--mws-color-border-subtle)]">
+      <ol className="relative grid gap-5 before:absolute before:left-5 before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-(--mws-color-border-subtle)">
         {steps.map((step) => (
           <li key={step.id} className="relative flex gap-4">
             <span
               className={cx(
                 "z-10 flex size-10 shrink-0 items-center justify-center radius-full border bg-surface-card",
-                statusClass[step.status],
+                statusClass[step.status]
               )}
             >
               {statusIcon[step.status]}

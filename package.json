@@ -11,7 +11,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/mws-ui-kit.js",
       "require": "./dist/mws-ui-kit.umd.cjs"
-    }
+    },
+    "./style.css": "./dist/mws-ui-kit.css"
   },
   "files": [
     "dist",

@@ -396,7 +396,7 @@ export function DataTable<T>({
           )}
         >
           <input
-            className="focus-ring size-4 accent-[var(--mws-color-brand-primary)]"
+            className="focus-ring size-4 accent-(--mws-color-brand-primary)"
             type="checkbox"
             aria-label={`Select row ${getRowLabelIndex(rowIndex)}`}
             checked={selectedRowIdSet.has(id)}
@@ -465,7 +465,7 @@ export function DataTable<T>({
       >
         <table
           className={cx(
-            "w-full min-w-[48rem] text-left",
+            "w-full min-w-3xl text-left",
             useVirtualization ? "grid" : "border-collapse",
             tableClassName
           )}
@@ -492,7 +492,7 @@ export function DataTable<T>({
                     ref={(node) => {
                       if (node) node.indeterminate = someVisibleSelected;
                     }}
-                    className="focus-ring size-4 accent-[var(--mws-color-brand-primary)]"
+                    className="focus-ring size-4 accent-(--mws-color-brand-primary)"
                     type="checkbox"
                     aria-label="Select all visible rows"
                     aria-checked={
@@ -581,7 +581,7 @@ export function DataTable<T>({
           </thead>
           <tbody
             className={cx(
-              "divide-y divide-[var(--mws-color-border-subtle)]",
+              "divide-y divide-(--mws-color-border-subtle)",
               useVirtualization && "relative block"
             )}
             style={

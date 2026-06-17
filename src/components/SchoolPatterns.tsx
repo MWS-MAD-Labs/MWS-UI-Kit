@@ -93,7 +93,7 @@ export function StudentCard({
         <div
           className={cx(
             "flex size-14 shrink-0 items-center justify-center radius-full bg-brand-primary-soft text-brand ring-4",
-            tone.ring,
+            tone.ring
           )}
         >
           {avatar ?? <UserRound className="size-6" aria-hidden="true" />}
@@ -175,13 +175,13 @@ export function StudentProfileHeader({
 
   return (
     <Card className="overflow-hidden" padding="none">
-      <div className="bg-gradient-to-br from-[var(--mws-color-brand-sky-soft)] via-[var(--mws-color-surface-card)] to-[var(--mws-color-brand-sage-soft)] p-6 md:p-8">
+      <div className="bg-linear-to-br from-(--mws-color-brand-sky-soft) via-(--mws-color-surface-card) to-(--mws-color-brand-sage-soft) p-6 md:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex min-w-0 gap-5">
             <div
               className={cx(
                 "flex size-20 shrink-0 items-center justify-center radius-full bg-surface-card text-brand ring-4",
-                tone.ring,
+                tone.ring
               )}
             >
               {student.avatar ?? (
@@ -228,7 +228,7 @@ export function StudentProfileHeader({
         </div>
       </div>
       {metrics.length ? (
-        <dl className="grid divide-y divide-[var(--mws-color-border-subtle)] md:grid-cols-4 md:divide-x md:divide-y-0">
+        <dl className="grid divide-y divide-(--mws-color-border-subtle) md:grid-cols-4 md:divide-x md:divide-y-0">
           {metrics.map((metric) => (
             <div key={metric.label} className="p-5">
               <dt className="heading-font text-xs font-bold uppercase tracking-wide text-tertiary">
@@ -328,7 +328,7 @@ export function EmotionPicker({
                 "focus-ring flex flex-col items-center gap-2 radius-xl border p-4 text-center transition",
                 selected
                   ? "border-brand bg-brand-primary-soft text-brand"
-                  : "border-subtle bg-surface-card text-primary hover:bg-surface-base",
+                  : "border-subtle bg-surface-card text-primary hover:bg-surface-base"
               )}
               type="button"
               role="radio"
@@ -387,7 +387,7 @@ export function BookCard({
   const content = (
     <Card variant={href ? "interactive" : "default"} className="h-full">
       <div className="flex gap-4">
-        <div className="flex aspect-[3/4] w-24 shrink-0 items-center justify-center radius-lg bg-gradient-to-br from-[var(--mws-color-brand-sky-soft)] to-[var(--mws-color-brand-gold-soft)] text-brand shadow-sm">
+        <div className="flex aspect-3/4 w-24 shrink-0 items-center justify-center radius-lg bg-linear-to-br from-(--mws-color-brand-sky-soft) to-(--mws-color-brand-gold-soft) text-brand shadow-sm">
           {cover ?? <BookOpen className="size-9" aria-hidden="true" />}
         </div>
         <div className="min-w-0 flex-1">
@@ -691,7 +691,7 @@ export function AnnouncementCard({
             "flex size-12 shrink-0 items-center justify-center radius-lg",
             featured
               ? "bg-surface-card text-brand-gold"
-              : "bg-brand-primary-soft text-brand",
+              : "bg-brand-primary-soft text-brand"
           )}
         >
           {featured ? (

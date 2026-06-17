@@ -338,7 +338,7 @@ Avoid:
 
 ---
 
-## 9. Product-Specific Patterns
+## 10. Product-Specific Patterns
 
 ### Reading Buddy
 
@@ -409,7 +409,7 @@ Recommended components:
 
 ---
 
-## 10. Copywriting Rules
+## 11. Copywriting Rules
 
 MWS UI copy should sound:
 
@@ -473,7 +473,7 @@ Avoid:
 
 ---
 
-## 11. Accessibility Requirements
+## 12. Accessibility Requirements
 
 All MWS apps should meet baseline accessibility standards.
 
@@ -496,7 +496,7 @@ When using icons:
 
 ---
 
-## 12. Implementation Workflow for Developers
+## 13. Implementation Workflow for Developers
 
 When building a new screen:
 
@@ -513,7 +513,7 @@ When building a new screen:
 
 ---
 
-## 13. Final Design Checklist
+## 14. Final Design Checklist
 
 Before shipping a screen, ask:
 
@@ -530,7 +530,7 @@ Before shipping a screen, ask:
 
 ---
 
-## 14. Contribution Guidelines
+## 15. Contribution Guidelines
 
 When adding to this UI kit:
 
@@ -552,7 +552,7 @@ If the build fails, fix the issue before publishing.
 
 ---
 
-## 15. Practical Rule for Developers
+## 16. Practical Rule for Developers
 
 If a design decision is unclear, choose the option that is:
 

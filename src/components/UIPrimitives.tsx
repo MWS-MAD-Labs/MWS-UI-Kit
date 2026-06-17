@@ -589,7 +589,7 @@ export function Checkbox({
           id={fieldId}
           type="checkbox"
           className={cx(
-            "focus-ring mt-1 size-5 shrink-0 radius-sm accent-[var(--mws-color-brand-primary)]",
+            "focus-ring mt-1 size-5 shrink-0 radius-sm accent-(--mws-color-brand-primary)",
             className
           )}
           aria-describedby={describedBy}
@@ -677,7 +677,7 @@ export function RadioGroup({
             >
               <input
                 id={id}
-                className="focus-ring mt-1 size-5 shrink-0 accent-[var(--mws-color-brand-primary)]"
+                className="focus-ring mt-1 size-5 shrink-0 accent-(--mws-color-brand-primary)"
                 type="radio"
                 name={name}
                 value={option.value}
@@ -874,7 +874,7 @@ export function ToastViewport({
 }) {
   return (
     <div
-      className="fixed bottom-4 right-4 z-[70] grid w-[min(24rem,calc(100vw-2rem))] gap-3"
+      className="fixed bottom-4 right-4 z-70 grid w-[min(24rem,calc(100vw-2rem))] gap-3"
       aria-live="polite"
       aria-relevant="additions removals"
     >
@@ -996,7 +996,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal(
   return createPortal(
     <div
       className={cx(
-        "fixed inset-0 z-[60] flex items-center justify-center p-4",
+        "fixed inset-0 z-60 flex items-center justify-center p-4",
         overlayBackdropClassName
       )}
       role="presentation"
@@ -1096,7 +1096,7 @@ export function Tabs({
               className={cx(
                 "focus-ring heading-font -mb-px border-b-2 px-4 py-3 text-sm font-bold transition",
                 selected
-                  ? "border-[var(--mws-color-brand-primary)] text-brand"
+                  ? "border-(--mws-color-brand-primary) text-brand"
                   : "border-transparent text-tertiary hover:text-brand",
                 tab.disabled && "cursor-not-allowed opacity-50"
               )}
