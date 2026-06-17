@@ -21,7 +21,9 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -b && vite build",
+    "prepack": "npm run build",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
