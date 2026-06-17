@@ -154,6 +154,15 @@ function App() {
       onSelect: () => jumpToSection("examples"),
     },
     {
+      id: "consumers",
+      label: "Open consumer guide",
+      description: "Review v0.2.0 package usage and release notes",
+      keywords: ["package", "exports", "release", "semver", "modal"],
+      group: "Navigate",
+      icon: <BookOpen className="size-4" />,
+      onSelect: () => jumpToSection("consumers"),
+    },
+    {
       id: "implementation",
       label: "Open implementation plan",
       description: "Jump to phased rollout guidance",
@@ -182,6 +191,7 @@ function App() {
       <PatternsPreview />
       <ProductExamples />
       <Templates />
+      <ConsumerGuidance />
       <Implementation />
       <FinalChecklist />
       <Footer />
@@ -198,6 +208,7 @@ function Navigation() {
     "Components",
     "Motion",
     "Examples",
+    "Consumers",
     "Implementation",
   ];
 
@@ -1026,6 +1037,161 @@ function Templates() {
             </Card>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+function ConsumerGuidance() {
+  const apiExports = [
+    "Button, Input, Modal",
+    "AppShell, DataTable, CommandPalette, FormWizard",
+    "Design tokens from ./tokens",
+  ];
+
+  const releaseChecks = [
+    "Use Changesets for every user-visible package change.",
+    "Follow docs/semver-policy.md to decide major, minor, and patch releases.",
+    "Run the release workflow before publishing so CHANGELOG.md and package versions stay aligned.",
+  ];
+
+  return (
+    <section id="consumers" className="bg-surface-card px-5 py-20 lg:px-8">
+      <SectionHeader
+        eyebrow="Using v0.2.0"
+        title="Everything consumers need to adopt the package"
+        description="Version 0.2.0 turns the homepage into a clearer handoff for product teams: how to import the kit, which APIs are public, what accessibility guarantees changed, and how releases are governed."
+      />
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <Card className="overflow-hidden" padding="none">
+          <div className="border-b border-subtle bg-brand-navy-soft p-6">
+            <Badge tone="navy">Package entry points</Badge>
+            <h3 className="heading-font mt-4 text-2xl font-bold text-primary">
+              Import components and the packaged stylesheet
+            </h3>
+            <p className="mt-3 leading-7 text-tertiary">
+              Apps should consume the public barrel instead of reaching into
+              internal source files. The CSS bundle is exported as a package
+              subpath so every consumer gets the same tokens, focus rings,
+              motion utilities, and component styles.
+            </p>
+          </div>
+          <div className="grid gap-4 p-6">
+            <pre className="overflow-x-auto rounded-3xl bg-[var(--mws-color-brand-navy)] p-5 text-sm leading-7 text-inverse">
+              <code>{`import { Button, Input, Modal } from "mws-ui-kit";
+import "mws-ui-kit/style.css";`}</code>
+            </pre>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {apiExports.map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-subtle bg-surface-base p-4"
+                >
+                  <CheckCircle2 className="text-brand-sage" size={20} />
+                  <p className="mt-3 text-sm font-semibold leading-6 text-secondary">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <div className="grid gap-6">
+          <Card>
+            <Badge tone="sage">Accessible primitives</Badge>
+            <h3 className="heading-font mt-4 text-2xl font-bold text-primary">
+              Refs and focus behavior are part of the contract
+            </h3>
+            <div className="mt-5 grid gap-4">
+              <div className="rounded-2xl bg-surface-base p-4">
+                <p className="heading-font font-bold text-primary">
+                  Button and Input forward refs
+                </p>
+                <p className="mt-2 text-sm leading-6 text-tertiary">
+                  Forms, wizards, validation flows, and integrations can attach
+                  refs directly to the underlying interactive element.
+                </p>
+              </div>
+              <div className="rounded-2xl bg-surface-base p-4">
+                <p className="heading-font font-bold text-primary">
+                  Modal traps focus while open
+                </p>
+                <p className="mt-2 text-sm leading-6 text-tertiary">
+                  Keyboard users stay inside the dialog, Escape closes it, body
+                  scroll is locked, and focus returns to the trigger when the
+                  modal closes.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <Badge tone="sky">Shared backdrop tokens</Badge>
+            <h3 className="heading-font mt-4 text-2xl font-bold text-primary">
+              Headers and overlays use reusable backdrop classes
+            </h3>
+            <p className="mt-3 leading-7 text-tertiary">
+              Use the shared backdrop class names for sticky navigation and
+              modal overlays so blur, opacity, and warmth stay consistent across
+              MAD Labs products.
+            </p>
+            <div className="mt-5 grid gap-3 text-sm font-semibold text-secondary">
+              <code className="rounded-2xl bg-surface-base p-3">
+                headerBackdropClassName
+              </code>
+              <code className="rounded-2xl bg-surface-base p-3">
+                overlayBackdropClassName
+              </code>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-6 grid max-w-7xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <Card>
+          <Badge tone="gold">Release governance</Badge>
+          <h3 className="heading-font mt-4 text-2xl font-bold text-primary">
+            Version changes follow the documented release path
+          </h3>
+          <div className="mt-5 space-y-3">
+            {releaseChecks.map((item) => (
+              <div
+                key={item}
+                className="flex gap-3 rounded-2xl bg-surface-base p-4"
+              >
+                <CheckCircle2
+                  className="mt-0.5 shrink-0 text-brand-sage"
+                  size={20}
+                />
+                <p className="text-sm leading-6 text-secondary">{item}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+        <Card>
+          <Badge tone="rose">Consumer checklist</Badge>
+          <h3 className="heading-font mt-4 text-2xl font-bold text-primary">
+            Before adopting v0.2.0 in an app
+          </h3>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {[
+              "Import from the package root only.",
+              "Load mws-ui-kit/style.css once near the app root.",
+              "Use Modal for dialogs that need focus management.",
+              "Prefer shared backdrop classes over custom overlay colors.",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-2xl border border-subtle bg-surface-base p-4"
+              >
+                <p className="text-sm font-semibold leading-6 text-secondary">
+                  {item}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Card>
       </div>
     </section>
   );
