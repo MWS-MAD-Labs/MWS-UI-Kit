@@ -2,6 +2,10 @@
   "name": "mws-ui-kit",
   "private": false,
   "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MWS-MAD-Labs/MWS-UI-Kit"
+  },
   "type": "module",
   "main": "./dist/mws-ui-kit.umd.cjs",
   "module": "./dist/mws-ui-kit.js",
