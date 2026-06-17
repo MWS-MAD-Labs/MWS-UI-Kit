@@ -19,6 +19,11 @@
     "README.md",
     "CHANGELOG.md"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist",
