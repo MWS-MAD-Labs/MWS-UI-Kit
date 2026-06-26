@@ -32,6 +32,7 @@
     "dev": "vite",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc -b && vite build",
+    "build:homepage": "vite build --config vite.homepage.config.ts",
     "prepack": "npm run build",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",

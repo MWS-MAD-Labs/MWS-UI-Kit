@@ -13,12 +13,13 @@ RUN npm ci
 FROM deps AS build
 
 COPY . .
-RUN npm run build
+RUN npm run build:homepage
 
 FROM nginx:${NGINX_VERSION} AS runtime
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /app/dist-homepage /usr/share/nginx/html
 
 EXPOSE 80
 
