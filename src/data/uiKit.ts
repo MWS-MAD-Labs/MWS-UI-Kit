@@ -201,6 +201,7 @@ export const componentGroups = [
       "ParentNotice",
       "ReflectionCard",
       "AnnouncementCard",
+      "MwsLogo",
     ],
   },
 ];

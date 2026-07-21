@@ -89,6 +89,31 @@ export function BrandPanel() {
 
 Prefer semantic CSS variables such as `--mws-color-text-primary`, `--mws-color-surface-card`, and `--mws-color-brand-primary` over hard-coded colors.
 
+## MWS logo usage
+
+The package displays the official MWS image files in three responsive configurations. Default deployment paths are centralized in `mwsLogoSources` inside `src/components/MwsLogo.tsx`:
+
+```tsx
+import { MwsLogo } from "mws-ui-kit";
+
+export function BrandExamples() {
+  return (
+    <>
+      <MwsLogo variant="horizontal" title="Millennia World School" />
+      <MwsLogo variant="vertical" title="Millennia World School" />
+      <MwsLogo variant="crest" title="Millennia World School crest" />
+      <MwsLogo
+        variant="horizontal"
+        src="https://your-deployment-server.example/brand/mws-horizontal.png"
+        title="Millennia World School"
+      />
+    </>
+  );
+}
+```
+
+Use `horizontal` in headers and wide layouts, `vertical` for centered formal compositions, and `crest` for compact or square placements. Set the final server paths in `mwsLogoSources`, or override an individual instance with `src`. Omit `title` when the logo is decorative; the component then renders with an empty `alt` attribute.
+
 ## Button usage
 
 ```tsx

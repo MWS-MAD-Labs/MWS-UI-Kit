@@ -46,6 +46,7 @@ import {
   ProgressBar,
   SectionHeader,
 } from "./components/UIPrimitives";
+import { MwsLogo } from "./components/MwsLogo";
 
 const foundationThemes = [
   "bg-brand-rose-soft text-brand-rose",
@@ -118,6 +119,15 @@ function App() {
       onSelect: () => jumpToSection("foundations"),
     },
     {
+      id: "logo",
+      label: "Open logo guidelines",
+      description: "Review the official MWS logo configurations",
+      keywords: ["brand", "crest", "wordmark", "identity"],
+      group: "Navigate",
+      icon: <Sparkles className="size-4" />,
+      onSelect: () => jumpToSection("logo"),
+    },
+    {
       id: "tokens",
       label: "Open tokens",
       description: "View color and brand token guidance",
@@ -184,6 +194,7 @@ function App() {
       <Hero />
       <AiAgentGuide />
       <Foundations />
+      <LogoGuidelines />
       <BrandTokens />
       <TypographySection />
       <ComponentSystem />
@@ -204,6 +215,7 @@ function Navigation() {
   const links = [
     "AI Guide",
     "Foundations",
+    "Logo",
     "Tokens",
     "Components",
     "Motion",
@@ -218,8 +230,12 @@ function Navigation() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#top" className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-brand-primary text-inverse shadow-lg shadow-brand">
-            <Heart size={22} fill="currentColor" />
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-surface-card p-1 shadow-lg shadow-brand">
+            <MwsLogo
+              variant="crest"
+              className="h-full w-auto object-contain"
+              loading="eager"
+            />
           </div>
           <div>
             <p className="heading-font text-sm font-extrabold tracking-wide text-brand">
@@ -228,7 +244,7 @@ function Navigation() {
             <p className="text-xs text-tertiary">Heart & Purpose UI Kit</p>
           </div>
         </a>
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           {links.map((link) => (
             <a
               key={link}
@@ -240,7 +256,7 @@ function Navigation() {
           ))}
         </div>
         <button
-          className="focus-ring rounded-full border border-subtle bg-surface-card p-3 text-brand md:hidden"
+          className="focus-ring rounded-full border border-subtle bg-surface-card p-3 text-brand lg:hidden"
           aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-navigation"
@@ -253,7 +269,7 @@ function Navigation() {
       {isMenuOpen ? (
         <div
           id="mobile-navigation"
-          className="border-t border-subtle bg-surface-base px-5 py-4 md:hidden"
+          className="border-t border-subtle bg-surface-base px-5 py-4 lg:hidden"
         >
           <div className="mx-auto grid max-w-7xl gap-2">
             {links.map((link) => (
@@ -552,6 +568,95 @@ function Foundations() {
             </Card>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+function LogoGuidelines() {
+  const logoVariants = [
+    {
+      variant: "vertical" as const,
+      name: "Vertical lockup",
+      description:
+        "Use for covers, welcome screens, posters, formal documents, and centered compositions with generous vertical space.",
+      previewClassName: "mx-auto h-80 max-w-full",
+      frameClassName: "min-h-[25rem]",
+    },
+    {
+      variant: "horizontal" as const,
+      name: "Horizontal lockup",
+      description:
+        "Preferred for website headers, navigation, presentations, email signatures, and other wide layouts.",
+      previewClassName: "w-full max-w-3xl",
+      frameClassName: "min-h-64",
+    },
+    {
+      variant: "crest" as const,
+      name: "Crest mark",
+      description:
+        "Use in compact spaces such as app icons, avatars, badges, profile marks, and square identity placements.",
+      previewClassName: "h-72 max-w-full",
+      frameClassName: "min-h-[25rem]",
+    },
+  ];
+
+  return (
+    <section id="logo" className="bg-surface-card px-5 py-20 lg:px-8">
+      <SectionHeader
+        eyebrow="Brand identity"
+        title="The official MWS logo system"
+        description="Choose the configuration that best fits the available space. Keep the artwork proportional, preserve clear space around it, and never redraw, stretch, recolor, crop, or rearrange its elements."
+      />
+
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2">
+        {logoVariants.map((logo, index) => (
+          <Card
+            key={logo.variant}
+            className={`overflow-hidden shadow-none ${
+              index === 1 ? "lg:col-span-2" : ""
+            }`}
+          >
+            <div
+              className={`flex ${logo.frameClassName} items-center justify-center rounded-[1.75rem] border border-subtle bg-white p-6 md:p-10`}
+            >
+              <MwsLogo
+                variant={logo.variant}
+                title={`Millennia World School ${logo.name}`}
+                className={`${logo.previewClassName} object-contain`}
+              />
+            </div>
+            <div className="mt-6 flex items-start gap-4">
+              <span className="heading-font flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-sm font-extrabold text-inverse">
+                {index + 1}
+              </span>
+              <div>
+                <h3 className="heading-font text-xl font-bold text-primary">
+                  {logo.name}
+                </h3>
+                <p className="mt-2 leading-7 text-tertiary">
+                  {logo.description}
+                </p>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <div className="mx-auto mt-6 grid max-w-7xl gap-5 md:grid-cols-3">
+        {[
+          ["Clear space", "Keep clear space around every logo at least equal to the height of the word MILLENNIA in the crest."],
+          ["Minimum size", "Use the crest no smaller than 40 px wide. At smaller sizes, use a simplified approved asset rather than removing details."],
+          ["Approved color", "Use the official Burgundy and White artwork on a clean, high-contrast background. Do not apply effects or alternate colors."],
+        ].map(([title, description]) => (
+          <div
+            key={title}
+            className="rounded-3xl border border-subtle bg-surface-base p-6"
+          >
+            <h3 className="heading-font font-bold text-brand">{title}</h3>
+            <p className="mt-2 text-sm leading-6 text-tertiary">{description}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

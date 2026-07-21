@@ -6,6 +6,8 @@ services:
     pull_policy: always
     ports:
       - "0.0.0.0:18080:80"
+    volumes:
+      - ./brand-assets:/usr/share/nginx/html/images/brand:ro
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
       interval: 30s
