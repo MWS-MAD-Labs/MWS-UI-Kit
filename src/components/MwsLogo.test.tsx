@@ -11,7 +11,7 @@ describe("MwsLogo", () => {
       expect(logo).toBeInTheDocument();
       expect(logo).toHaveAttribute(
         "src",
-        `/images/brand/mws-logo-${variant}.png`
+        `/images/brand/mws-logo-${variant}.png?v=20260721-1`
       );
     }
   );
