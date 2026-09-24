@@ -7,9 +7,22 @@
       name="description"
       content="MWS Heart & Purpose UI Kit for Millennia World School digital products."
     />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (() => {
+        const savedTheme = localStorage.getItem("mws-theme");
+        const theme =
+          savedTheme === "light" || savedTheme === "dark"
+            ? savedTheme
+            : matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <title>MWS Heart & Purpose UI Kit</title>
-    <script type="module" crossorigin src="/assets/index-mxjdQQsD.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DE7sSNDM.css">
+    <script type="module" crossorigin src="/assets/index-JAWLSOmC.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DVmSE6-D.css">
   </head>
   <body>
     <div id="root"></div>
