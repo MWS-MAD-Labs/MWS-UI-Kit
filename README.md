@@ -478,11 +478,11 @@ npm run docker:down
 
 ## Additional docs
 
-- [`docs/DataTable.md`](docs/DataTable.md) — detailed `DataTable` behavior, virtualization, and limitations.
-- [`docs/semver-policy.md`](docs/semver-policy.md) — release versioning policy.
-- [`docs/release-workflow.md`](docs/release-workflow.md) — Changesets release workflow.
-- [`docs/AI_AGENT_GUIDE.md`](docs/AI_AGENT_GUIDE.md) — compact guide for AI coding agents.
-- [`docs/DEVELOPER_GUIDELINES.md`](docs/DEVELOPER_GUIDELINES.md) — implementation rules and contribution guidance.
+- [`docs/DataTable.md`](docs/DataTable.md): detailed `DataTable` behavior, virtualization, and limitations.
+- [`docs/semver-policy.md`](docs/semver-policy.md): release versioning policy.
+- [`docs/release-workflow.md`](docs/release-workflow.md): Changesets release workflow.
+- [`docs/AI_AGENT_GUIDE.md`](docs/AI_AGENT_GUIDE.md): compact guide for AI coding agents.
+- [`docs/DEVELOPER_GUIDELINES.md`](docs/DEVELOPER_GUIDELINES.md): implementation rules and contribution guidance.
 
 ## Brand direction
 

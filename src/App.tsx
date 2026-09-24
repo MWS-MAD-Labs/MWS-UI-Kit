@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Bot,
   BookOpen,
   CheckCircle2,
-  Circle,
   ClipboardCheck,
   Compass,
   Heart,
+  Image,
   Leaf,
   Lightbulb,
   Menu,
-  Sparkles,
+  Moon,
+  Palette,
+  Search,
+  Sun,
   X,
 } from "lucide-react";
 import {
@@ -24,7 +27,6 @@ import {
   colors,
   componentGroups,
   foundations,
-  implementationPhases,
   metricCards,
   pageTemplates,
   productExamples,
@@ -42,7 +44,6 @@ import {
   Card,
   EmptyStatePreview,
   InputPreview,
-  LinkButton,
   ProgressBar,
   SectionHeader,
 } from "./components/UIPrimitives";
@@ -72,18 +73,31 @@ const templateIconThemes = [
   "text-brand-rose",
   "text-brand-sage",
   "text-brand-navy",
-  "text-brand-gold",
+  "text-brand-gold-strong",
   "text-brand-sky",
   "text-brand",
 ];
 const metricIconThemes = [
   "text-brand-sky",
-  "text-brand-gold",
+  "text-brand-gold-strong",
   "text-brand-sage",
 ];
 
+type Theme = "light" | "dark";
+
+function getInitialTheme(): Theme {
+  if (typeof document === "undefined") return "light";
+  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+}
+
 function App() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("mws-theme", theme);
+  }, [theme]);
 
   const jumpToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
@@ -124,7 +138,7 @@ function App() {
       description: "Review the official MWS logo configurations",
       keywords: ["brand", "crest", "wordmark", "identity"],
       group: "Navigate",
-      icon: <Sparkles className="size-4" />,
+      icon: <Image className="size-4" />,
       onSelect: () => jumpToSection("logo"),
     },
     {
@@ -133,7 +147,7 @@ function App() {
       description: "View color and brand token guidance",
       keywords: ["brand", "color", "design tokens"],
       group: "Navigate",
-      icon: <Sparkles className="size-4" />,
+      icon: <Palette className="size-4" />,
       onSelect: () => jumpToSection("tokens"),
     },
     {
@@ -172,20 +186,19 @@ function App() {
       icon: <BookOpen className="size-4" />,
       onSelect: () => jumpToSection("consumers"),
     },
-    {
-      id: "implementation",
-      label: "Open implementation plan",
-      description: "Jump to phased rollout guidance",
-      keywords: ["plan", "phases", "checklist"],
-      group: "Navigate",
-      icon: <CheckCircle2 className="size-4" />,
-      onSelect: () => jumpToSection("implementation"),
-    },
   ];
 
   return (
-    <main className="min-h-screen overflow-hidden bg-surface-base text-primary">
-      <Navigation />
+    <main className="min-h-screen bg-surface-base text-primary">
+      <Navigation
+        theme={theme}
+        onToggleTheme={() =>
+          setTheme((currentTheme) =>
+            currentTheme === "light" ? "dark" : "light"
+          )
+        }
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+      />
       <CommandPalette
         open={commandPaletteOpen}
         onOpenChange={setCommandPaletteOpen}
@@ -203,14 +216,21 @@ function App() {
       <ProductExamples />
       <Templates />
       <ConsumerGuidance />
-      <Implementation />
       <FinalChecklist />
       <Footer />
     </main>
   );
 }
 
-function Navigation() {
+function Navigation({
+  theme,
+  onToggleTheme,
+  onOpenCommandPalette,
+}: {
+  theme: Theme;
+  onToggleTheme: () => void;
+  onOpenCommandPalette: () => void;
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const links = [
     "AI Guide",
@@ -221,7 +241,6 @@ function Navigation() {
     "Motion",
     "Examples",
     "Consumers",
-    "Implementation",
   ];
 
   return (
@@ -244,7 +263,7 @@ function Navigation() {
             <p className="text-xs text-tertiary">Heart & Purpose UI Kit</p>
           </div>
         </a>
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 xl:flex">
           {links.map((link) => (
             <a
               key={link}
@@ -255,21 +274,49 @@ function Navigation() {
             </a>
           ))}
         </div>
-        <button
-          className="focus-ring rounded-full border border-subtle bg-surface-card p-3 text-brand lg:hidden"
-          aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-navigation"
-          type="button"
-          onClick={() => setIsMenuOpen((open) => !open)}
-        >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            className="focus-ring flex size-11 items-center justify-center rounded-full border border-subtle bg-surface-card text-secondary transition hover:bg-brand-primary-soft hover:text-brand"
+            type="button"
+            aria-label="Dark theme"
+            aria-pressed={theme === "dark"}
+            onClick={onToggleTheme}
+          >
+            {theme === "light" ? (
+              <Moon size={18} aria-hidden="true" />
+            ) : (
+              <Sun size={18} aria-hidden="true" />
+            )}
+          </button>
+          <button
+            className="focus-ring heading-font inline-flex min-h-11 items-center gap-2 rounded-full border border-subtle bg-surface-card px-3 text-sm font-bold text-secondary transition hover:bg-brand-primary-soft hover:text-brand"
+            type="button"
+            aria-label="Search and navigate"
+            aria-haspopup="dialog"
+            onClick={onOpenCommandPalette}
+          >
+            <Search size={18} aria-hidden="true" />
+            <span className="hidden xl:inline">Search</span>
+            <kbd className="hidden rounded-lg border border-subtle bg-surface-base px-2 py-1 text-xs text-tertiary xl:inline">
+              ⌘K
+            </kbd>
+          </button>
+          <button
+            className="focus-ring flex size-11 items-center justify-center rounded-full border border-subtle bg-surface-card text-brand xl:hidden"
+            aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            type="button"
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </nav>
       {isMenuOpen ? (
         <div
           id="mobile-navigation"
-          className="border-t border-subtle bg-surface-base px-5 py-4 lg:hidden"
+          className="border-t border-subtle bg-surface-base px-5 py-4 xl:hidden"
         >
           <div className="mx-auto grid max-w-7xl gap-2">
             {links.map((link) => (
@@ -294,17 +341,15 @@ function Hero() {
 
   return (
     <section id="top" className="relative px-5 py-16 md:py-24 lg:px-8">
-      <div className="absolute -left-24 top-20 size-72 rounded-full bg-[color-mix(in_srgb,var(--mws-color-brand-sky)_30%,transparent)] blur-3xl" />
-      <div className="absolute -right-24 top-36 size-80 rounded-full bg-[color-mix(in_srgb,var(--mws-color-brand-gold)_20%,transparent)] blur-3xl" />
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="relative motion-fade-up">
+        <div className="relative">
           <Badge tone="gold">
             Millennia World School digital design system
           </Badge>
           <h1 className="heading-font mt-6 max-w-4xl text-5xl font-extrabold leading-tight tracking-[-0.04em] text-primary md:text-7xl">
             Growing with <span className="text-brand">heart</span>,{" "}
             <span className="text-brand-sage">purpose</span>, and{" "}
-            <span className="text-brand-gold">joy</span> across every MWS app.
+            <span className="text-brand-gold-strong">joy</span> across every MWS app.
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-9 text-secondary">
             A warm, accessible, developer-ready UI kit for MAD Labs products:
@@ -327,23 +372,23 @@ function Hero() {
             goodness grows.”
           </blockquote>
         </div>
-        <div className="relative motion-fade-up motion-delay-200">
-          <div className="absolute -right-4 -top-5 flex size-14 items-center justify-center rounded-full bg-brand-gold-soft text-brand-gold motion-orbit">
-            <Sparkles size={20} />
-          </div>
-          <div className="soft-shadow motion-float rounded-[2rem] border border-subtle bg-surface-card p-4">
+        <div className="relative motion-fade-up">
+          <div className="soft-shadow rounded-[2rem] border border-subtle bg-surface-card p-4">
             <div className="rounded-[1.5rem] border border-status-info bg-gradient-to-br from-[var(--mws-color-brand-sky-soft)] via-[var(--mws-color-surface-card)] to-[var(--mws-color-brand-sage-soft)] p-5 text-primary">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="heading-font text-sm font-bold text-brand">
-                    MWS Dashboard
-                  </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="heading-font text-sm font-bold text-brand">
+                      MWS Dashboard
+                    </p>
+                    <Badge tone="navy">Sample data</Badge>
+                  </div>
                   <h2 className="heading-font mt-2 text-2xl font-extrabold text-brand-navy">
                     Welcome back, Ms. Sarah
                   </h2>
                 </div>
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-[color-mix(in_srgb,var(--mws-color-brand-gold)_20%,transparent)] text-brand-gold motion-pulse-soft">
-                  <Sparkles size={22} />
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-gold-soft text-brand-gold-strong">
+                  <CheckCircle2 size={22} aria-hidden="true" />
                 </div>
               </div>
               <p className="mt-4 leading-7 text-secondary">
@@ -357,13 +402,7 @@ function Hero() {
                 return (
                   <div
                     key={metric.label}
-                    className={`motion-fade-up rounded-3xl bg-surface-base p-5 ${
-                      index === 1
-                        ? "motion-delay-100"
-                        : index === 2
-                        ? "motion-delay-200"
-                        : ""
-                    }`}
+                    className="rounded-3xl bg-surface-base p-5"
                   >
                     <Icon className={metricIconThemes[index]} size={24} />
                     <p className="heading-font mt-4 text-3xl font-extrabold text-brand">
@@ -475,24 +514,47 @@ function AiAgentGuide() {
           </div>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-4">
-          {aiAgentBrief.map((item) => (
-            <Card key={item.title} className="shadow-none">
-              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-brand-sky-soft text-brand-sky">
+        <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+          <Card className="border-brand bg-brand-navy-soft shadow-none" padding="spacious">
+            <div className="flex items-center gap-3">
+              <div className="flex size-12 items-center justify-center rounded-2xl bg-surface-card text-brand-navy">
                 <Bot size={24} />
               </div>
-              <Badge tone="sky">{item.label}</Badge>
-              <h3 className="heading-font mt-4 text-xl font-bold text-primary">
-                {item.title}
-              </h3>
-              <p className="mt-3 text-sm leading-6 text-tertiary">
-                {item.detail}
-              </p>
-              <code className="mt-4 block rounded-2xl bg-code px-4 py-3 text-xs leading-5 text-inverse">
-                {item.source}
-              </code>
-            </Card>
-          ))}
+              <Badge tone="navy">{aiAgentBrief[0].label}</Badge>
+            </div>
+            <h3 className="heading-font mt-6 text-3xl font-extrabold text-primary">
+              {aiAgentBrief[0].title}
+            </h3>
+            <p className="mt-4 max-w-2xl leading-7 text-secondary">
+              {aiAgentBrief[0].detail}
+            </p>
+            <code className="mt-6 block rounded-2xl bg-code px-4 py-3 text-sm leading-6 text-on-dark">
+              {aiAgentBrief[0].source}
+            </code>
+          </Card>
+          <div className="grid gap-3">
+            {aiAgentBrief.slice(1).map((item) => (
+              <div
+                key={item.title}
+                className="grid gap-3 rounded-3xl border border-subtle bg-surface-base p-5 sm:grid-cols-[auto_1fr]"
+              >
+                <Badge tone="sky" className="self-start">
+                  {item.label}
+                </Badge>
+                <div>
+                  <h3 className="heading-font font-bold text-primary">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-tertiary">
+                    {item.detail}
+                  </p>
+                  <code className="mt-3 block text-xs font-semibold text-brand">
+                    {item.source}
+                  </code>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="mt-6 grid gap-5 lg:grid-cols-2">
@@ -551,21 +613,53 @@ function Foundations() {
         title="Compassionate, clear, and school-ready"
         description="The UI kit turns MWS values into reusable product decisions: warm tone, calm layouts, meaningful color, and evidence-based workflows."
       />
-      <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.05fr_0.95fr]">
         {foundations.map((item, index) => {
           const Icon = item.icon;
+          if (index === 0) {
+            return (
+              <Card
+                key={item.title}
+                className="border-brand bg-brand-primary-soft lg:row-span-3"
+                padding="spacious"
+              >
+                <div
+                  className={`mb-8 flex size-16 items-center justify-center rounded-3xl ${foundationThemes[index]}`}
+                >
+                  <Icon size={30} />
+                </div>
+                <p className="heading-font text-sm font-bold uppercase tracking-[0.18em] text-brand">
+                  Lead principle
+                </p>
+                <h3 className="heading-font mt-4 text-3xl font-extrabold text-primary">
+                  {item.title}
+                </h3>
+                <p className="mt-5 max-w-xl text-lg leading-8 text-secondary">
+                  {item.description}
+                </p>
+              </Card>
+            );
+          }
+
           return (
-            <Card key={item.title}>
+            <div
+              key={item.title}
+              className="flex gap-5 rounded-3xl border border-subtle bg-surface-card p-6"
+            >
               <div
-                className={`mb-5 flex size-12 items-center justify-center rounded-2xl ${foundationThemes[index]}`}
+                className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${foundationThemes[index]}`}
               >
                 <Icon size={24} />
               </div>
-              <h3 className="heading-font text-xl font-bold text-primary">
-                {item.title}
-              </h3>
-              <p className="mt-3 leading-7 text-tertiary">{item.description}</p>
-            </Card>
+              <div>
+                <h3 className="heading-font text-xl font-bold text-primary">
+                  {item.title}
+                </h3>
+                <p className="mt-2 leading-7 text-tertiary">
+                  {item.description}
+                </p>
+              </div>
+            </div>
           );
         })}
       </div>
@@ -705,37 +799,43 @@ function TypographySection() {
         title="Three Google Fonts, each with a clear role"
         description="Plus Jakarta Sans gives structure, Nunito Sans keeps communication friendly, and Lora adds thoughtful emphasis for values and quotes."
       />
-      <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-3">
-        <Card>
-          <Badge>Headlines</Badge>
-          <p className="heading-font mt-5 text-4xl font-extrabold leading-tight text-brand">
-            Plus Jakarta Sans
-          </p>
-          <p className="mt-4 leading-7 text-tertiary">
-            Use for hero headlines, page titles, section headings, buttons,
-            labels, and product navigation.
-          </p>
-        </Card>
-        <Card>
-          <Badge tone="sage">Body text</Badge>
-          <p className="body-font mt-5 text-3xl font-bold leading-tight text-primary">
-            Nunito Sans
-          </p>
-          <p className="mt-4 leading-7 text-tertiary">
-            Use for parent letters, reports, captions, card descriptions, and
-            long-form interface copy.
-          </p>
-        </Card>
-        <Card>
-          <Badge tone="gold">Quotes</Badge>
-          <p className="quote-font mt-5 text-3xl leading-snug text-primary">
-            Lora Medium Italic
-          </p>
-          <p className="mt-4 leading-7 text-tertiary">
-            Use sparingly for mission lines, reflection prompts, invitations,
-            and philosophical statements.
-          </p>
-        </Card>
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-subtle bg-surface-card">
+        <div className="grid gap-6 border-b border-subtle p-6 md:grid-cols-[12rem_1fr] md:p-8">
+          <Badge className="self-start">Headlines</Badge>
+          <div>
+            <p className="heading-font text-4xl font-extrabold leading-tight text-brand md:text-5xl">
+              Plus Jakarta Sans
+            </p>
+            <p className="mt-4 max-w-3xl leading-7 text-tertiary">
+              Use for hero headlines, page titles, section headings, buttons,
+              labels, and product navigation.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-6 border-b border-subtle bg-surface-base p-6 md:grid-cols-[12rem_1fr] md:p-8">
+          <Badge tone="sage" className="self-start">Body text</Badge>
+          <div>
+            <p className="body-font text-3xl font-bold leading-tight text-primary md:text-4xl">
+              Nunito Sans keeps long reading comfortable.
+            </p>
+            <p className="mt-4 max-w-3xl leading-7 text-tertiary">
+              Use for parent letters, reports, captions, card descriptions, and
+              long-form interface copy.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-6 p-6 md:grid-cols-[12rem_1fr] md:p-8">
+          <Badge tone="gold" className="self-start">Quotes</Badge>
+          <div>
+            <p className="quote-font text-3xl leading-snug text-primary md:text-4xl">
+              “Goodness grows through thoughtful choices.”
+            </p>
+            <p className="mt-4 max-w-3xl leading-7 text-tertiary">
+              Use Lora Medium Italic sparingly for mission lines, reflection
+              prompts, invitations, and philosophical statements.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -793,9 +893,6 @@ function AnimationKit() {
       <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
         <Card className="overflow-hidden bg-gradient-to-br from-[var(--mws-color-surface-base)] via-[var(--mws-color-surface-card)] to-[var(--mws-color-brand-sky-soft)]">
           <div className="relative rounded-[1.75rem] border border-subtle bg-surface-card p-5">
-            <div className="absolute right-6 top-6 flex size-12 items-center justify-center rounded-full bg-brand-gold-soft text-brand-gold motion-orbit">
-              <Sparkles size={18} />
-            </div>
             <div className="motion-fade-up">
               <Badge tone="rose">Live preview</Badge>
               <h3 className="heading-font mt-4 max-w-sm text-3xl font-extrabold tracking-tight text-brand">
@@ -899,31 +996,26 @@ function AnimationKit() {
                   index % 2 === 1 ? "motion-delay-100" : ""
                 }`}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <Badge
-                      tone={
-                        index % 3 === 0
-                          ? "burgundy"
-                          : index % 3 === 1
-                          ? "sky"
-                          : "gold"
-                      }
-                    >
-                      {pattern.className}
-                    </Badge>
-                    <h4 className="heading-font mt-4 text-lg font-bold text-brand">
-                      {pattern.name}
-                    </h4>
-                  </div>
-                  <div className="motion-pulse-soft flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand-gold-soft text-brand-gold">
-                    <Sparkles size={18} />
-                  </div>
+                <div>
+                  <Badge
+                    tone={
+                      index % 3 === 0
+                        ? "burgundy"
+                        : index % 3 === 1
+                        ? "sky"
+                        : "gold"
+                    }
+                  >
+                    {pattern.className}
+                  </Badge>
+                  <h4 className="heading-font mt-4 text-lg font-bold text-brand">
+                    {pattern.name}
+                  </h4>
                 </div>
                 <p className="mt-3 text-sm leading-6 text-tertiary">
                   {pattern.purpose}
                 </p>
-                <code className="mt-4 block rounded-2xl bg-code px-4 py-3 text-xs leading-5 text-inverse">
+                <code className="mt-4 block rounded-2xl bg-code px-4 py-3 text-xs leading-5 text-on-dark">
                   {pattern.usage}
                 </code>
               </Card>
@@ -1029,6 +1121,9 @@ function PatternsPreview() {
                 academic reporting.
               </p>
               <div className="mt-6 rounded-3xl border border-subtle bg-surface-base p-5">
+                <div className="mb-4 flex justify-end">
+                  <Badge tone="navy">Sample data</Badge>
+                </div>
                 <div className="flex items-center gap-3">
                   <div className="flex size-11 items-center justify-center rounded-2xl bg-brand-navy-soft text-brand-navy">
                     <BookOpen size={21} />
@@ -1038,7 +1133,7 @@ function PatternsPreview() {
                       Reading conference notes
                     </p>
                     <p className="text-sm text-tertiary">
-                      Submitted by Ms. Sarah · Today
+                      Submitted by Ms. Sarah, today
                     </p>
                   </div>
                 </div>
@@ -1059,7 +1154,6 @@ function PatternsPreview() {
           <p className="quote-font mt-5 text-2xl leading-9 text-primary">
             “What helped you feel calm and ready to learn today?”
           </p>
-          <LinkButton>See implementation phases</LinkButton>
         </Card>
       </div>
     </section>
@@ -1085,7 +1179,9 @@ function ProductExamples() {
               >
                 <div className="flex flex-col gap-6 md:flex-row md:items-start">
                   <div
-                    className="flex size-16 shrink-0 items-center justify-center rounded-3xl text-inverse"
+                    className={`flex size-16 shrink-0 items-center justify-center rounded-3xl ${
+                      index === 0 ? "text-brand-sky-on" : "text-inverse"
+                    }`}
                     style={{ background: product.accent }}
                   >
                     <Icon size={30} />
@@ -1127,19 +1223,29 @@ function Templates() {
         title="Reference screens that teams can copy with confidence"
         description="The UI kit should include complete page patterns so new apps inherit the same structure, tone, accessibility, and visual rhythm."
       />
-      <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-subtle bg-surface-card">
         {pageTemplates.map((template, index) => {
           const Icon = template.icon;
           return (
-            <Card key={template.name}>
-              <Icon className={templateIconThemes[index]} size={28} />
-              <h3 className="heading-font mt-5 text-xl font-bold text-primary">
-                {template.name}
-              </h3>
-              <p className="mt-3 leading-7 text-tertiary">
-                {template.description}
-              </p>
-            </Card>
+            <div
+              key={template.name}
+              className="grid gap-4 border-b border-subtle p-5 last:border-b-0 sm:grid-cols-[3rem_3rem_1fr] sm:items-start md:p-6"
+            >
+              <span className="heading-font text-sm font-extrabold text-tertiary">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="flex size-11 items-center justify-center rounded-2xl bg-surface-base">
+                <Icon className={templateIconThemes[index]} size={22} />
+              </div>
+              <div>
+                <h3 className="heading-font text-xl font-bold text-primary">
+                  {template.name}
+                </h3>
+                <p className="mt-2 max-w-3xl leading-7 text-tertiary">
+                  {template.description}
+                </p>
+              </div>
+            </div>
           );
         })}
       </div>
@@ -1297,44 +1403,6 @@ import "mws-ui-kit/style.css";`}</code>
             ))}
           </div>
         </Card>
-      </div>
-    </section>
-  );
-}
-
-function Implementation() {
-  return (
-    <section
-      id="implementation"
-      className="bg-gradient-to-br from-[var(--mws-color-brand-navy)] via-[color-mix(in_srgb,var(--mws-color-brand-navy)_86%,var(--mws-color-brand-sky))] to-[var(--mws-color-brand-sage)] px-5 py-20 text-inverse lg:px-8"
-    >
-      <SectionHeader
-        eyebrow="Implementation plan"
-        title="Build the system in focused phases"
-        description="Start with foundations that every app needs, then layer dashboards, school-specific components, and full templates."
-        inverse
-      />
-      <div className="mx-auto max-w-5xl">
-        <div className="relative space-y-5 before:absolute before:left-6 before:top-4 before:h-[calc(100%-2rem)] before:w-px before:bg-[color-mix(in_srgb,var(--mws-color-surface-card)_15%,transparent)]">
-          {implementationPhases.map((item) => (
-            <div key={item.phase} className="relative flex gap-5">
-              <div className="z-10 flex size-12 shrink-0 items-center justify-center rounded-full bg-brand-sky text-brand-navy">
-                <Circle size={14} fill="currentColor" />
-              </div>
-              <div className="rounded-3xl border border-[color-mix(in_srgb,var(--mws-color-text-inverse)_10%,transparent)] bg-[color-mix(in_srgb,var(--mws-color-surface-card)_8%,transparent)] p-6">
-                <p className="heading-font text-sm font-bold text-[color-mix(in_srgb,var(--mws-color-brand-gold)_72%,var(--mws-color-surface-card))]">
-                  {item.phase}
-                </p>
-                <h3 className="heading-font mt-2 text-2xl font-bold text-inverse">
-                  {item.title}
-                </h3>
-                <p className="mt-3 leading-7 text-[color-mix(in_srgb,var(--mws-color-text-inverse)_70%,transparent)]">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

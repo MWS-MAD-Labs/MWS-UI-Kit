@@ -10,7 +10,6 @@ import {
   MessageCircle,
   Send,
   ShieldCheck,
-  Sparkles,
   UserRound,
   XCircle,
 } from "lucide-react";
@@ -100,7 +99,7 @@ export function AIChatInterface({
           </div>
         ) : (
           <EmptyState
-            icon={<Sparkles className="size-5" />}
+            icon={<MessageCircle className="size-5" />}
             title="Start with a clear prompt"
             description="Ask for a draft, summary, checklist, or reflection support. Keep student-sensitive context minimal and review the result carefully."
           />
@@ -303,7 +302,7 @@ export function AIResponseCard({
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
           <div className="flex size-11 shrink-0 items-center justify-center radius-lg bg-brand-primary-soft text-brand">
-            <Sparkles className="size-5" aria-hidden="true" />
+            <Bot className="size-5" aria-hidden="true" />
           </div>
           <div>
             <h3 className="heading-font text-xl font-bold text-primary">

@@ -8,8 +8,8 @@ Primary instruction for AI agents: build interfaces that are readable, compassio
 
 - `docs/AI_AGENT_GUIDE.md`: compact workflow for AI coding agents.
 - `docs/DEVELOPER_GUIDELINES.md`: full implementation rules.
-- `src/data/uiKit.ts`: structured source for colors, foundations, component groups, product examples, templates, implementation phases, motion patterns, checklists, and agent guidance.
-- `src/components/UIPrimitives.tsx`: reusable primitives (`Button`, `Card`, `SectionHeader`, `Badge`, `InputPreview`, `ProgressBar`, `EmptyStatePreview`, `LinkButton`).
+- `src/data/uiKit.ts`: structured source for colors, foundations, component groups, product examples, templates, motion patterns, checklists, and agent guidance.
+- `src/components/UIPrimitives.tsx`: reusable primitives (`Button`, `Card`, `SectionHeader`, `Badge`, `InputPreview`, `ProgressBar`, `EmptyStatePreview`).
 - `src/styles/global.css`: CSS variables, approved fonts, focus ring, shadows, and motion utilities.
 - `src/App.tsx`: visual reference page and examples.
 

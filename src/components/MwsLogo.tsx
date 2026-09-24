@@ -15,6 +15,15 @@ export const mwsLogoSources: Record<MwsLogoVariant, string> = {
   vertical: `/images/brand/mws-logo-vertical.png?v=${MWS_LOGO_ASSET_VERSION}`,
 };
 
+const mwsLogoDimensions: Record<
+  MwsLogoVariant,
+  { width: number; height: number }
+> = {
+  crest: { width: 512, height: 512 },
+  horizontal: { width: 1200, height: 360 },
+  vertical: { width: 720, height: 960 },
+};
+
 export type MwsLogoProps = Omit<
   ImgHTMLAttributes<HTMLImageElement>,
   "alt" | "children" | "src"
@@ -32,14 +41,25 @@ export function MwsLogo({
   title,
   loading = "lazy",
   decoding = "async",
+  width,
+  height,
   ...props
 }: MwsLogoProps) {
+  const dimensions = mwsLogoDimensions[variant];
+  // Only default both dimensions when neither is set, so a single-dimension
+  // override lets the browser keep the intrinsic aspect ratio.
+  const sizeProps =
+    width !== undefined || height !== undefined
+      ? { width, height }
+      : { width: dimensions.width, height: dimensions.height };
+
   return (
     <img
       src={src ?? mwsLogoSources[variant]}
       alt={title ?? ""}
       loading={loading}
       decoding={decoding}
+      {...sizeProps}
       {...props}
     />
   );

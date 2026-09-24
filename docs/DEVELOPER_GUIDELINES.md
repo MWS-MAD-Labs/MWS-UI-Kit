@@ -208,7 +208,7 @@ Recommended shape values:
 
 ## 8. Animation Kit Usage
 
-Motion should make interfaces feel calm, responsive, and purposeful. Use animation to clarify hierarchy, feedback, and progress — not to decorate every element.
+Motion should make interfaces feel calm, responsive, and purposeful. Use animation to clarify hierarchy, feedback, and progress. Do not use it to decorate every element.
 
 ### Available motion utilities
 

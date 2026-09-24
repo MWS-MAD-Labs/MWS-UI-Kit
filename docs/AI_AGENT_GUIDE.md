@@ -12,12 +12,12 @@ Prioritize readability, compassion, accessibility, and reuse over novelty.
 
 ## Read order for agents
 
-1. `docs/AI_AGENT_GUIDE.md` — compact workflow and guardrails.
-2. `llms.txt` — machine-readable repository map and canonical rules.
-3. `src/data/uiKit.ts` — structured tokens, product references, page templates, checklists, and agent rules.
-4. `src/components/UIPrimitives.tsx` — reusable React primitives and expected class patterns.
-5. `src/styles/global.css` — CSS variables, typography classes, focus ring, shadows, and motion utilities.
-6. `docs/DEVELOPER_GUIDELINES.md` — full implementation guidance.
+1. `docs/AI_AGENT_GUIDE.md`: compact workflow and guardrails.
+2. `llms.txt`: machine-readable repository map and canonical rules.
+3. `src/data/uiKit.ts`: structured tokens, product references, page templates, checklists, and agent rules.
+4. `src/components/UIPrimitives.tsx`: reusable React primitives and expected class patterns.
+5. `src/styles/global.css`: CSS variables, typography classes, focus ring, shadows, and motion utilities.
+6. `docs/DEVELOPER_GUIDELINES.md`: full implementation guidance.
 
 ## Decision workflow
 

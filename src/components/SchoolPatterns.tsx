@@ -690,7 +690,7 @@ export function AnnouncementCard({
           className={cx(
             "flex size-12 shrink-0 items-center justify-center radius-lg",
             featured
-              ? "bg-surface-card text-brand-gold"
+              ? "bg-surface-card text-brand-gold-strong"
               : "bg-brand-primary-soft text-brand"
           )}
         >

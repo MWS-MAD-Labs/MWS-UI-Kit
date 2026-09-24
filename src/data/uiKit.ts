@@ -8,7 +8,6 @@ import {
   LineChart,
   MessageCircleHeart,
   ShieldCheck,
-  Sparkles,
   UsersRound,
 } from "lucide-react";
 
@@ -75,7 +74,7 @@ export const foundations = [
     title: "Clear for busy school days",
     description:
       "Parents, teachers, and leaders should understand the next action quickly without dense layouts.",
-    icon: Sparkles,
+    icon: CheckCircle2,
   },
   {
     title: "Evidence over assumption",
@@ -323,33 +322,6 @@ export const statuses = [
   { label: "Completed", tone: "burgundy" },
 ];
 
-export const implementationPhases = [
-  {
-    phase: "Phase 1",
-    title: "Foundations + core components",
-    description:
-      "Tokens, typography, colors, buttons, forms, badges, cards, alerts, progress, page headers, and empty states.",
-  },
-  {
-    phase: "Phase 2",
-    title: "Dashboard + data patterns",
-    description:
-      "Tables, filters, metric cards, timelines, activity feeds, chart containers, status badges, and approval flows.",
-  },
-  {
-    phase: "Phase 3",
-    title: "School-specific components",
-    description:
-      "Student cards, emotion check-ins, book cards, tier badges, evidence cards, announcements, and parent notices.",
-  },
-  {
-    phase: "Phase 4",
-    title: "Product templates",
-    description:
-      "Full reference pages for Reading Buddy, Daily Check-in, MTSS, Proofpoint, and future MAD Labs products.",
-  },
-];
-
 export const values = [
   {
     value: "Truth",
@@ -424,7 +396,7 @@ export const animationPatterns = [
     className: "motion-pulse-soft",
     purpose:
       "Highlight celebration, focus, or live status in a low-pressure way.",
-    usage: '<Sparkles className="motion-pulse-soft" />',
+    usage: '<span className="motion-pulse-soft">Live</span>',
   },
   {
     name: "Orbit accent",
@@ -435,7 +407,7 @@ export const animationPatterns = [
 ];
 
 export const animationGuidelines = [
-  "Use motion to clarify hierarchy, feedback, or progress — never as decoration that competes with learning.",
+  "Use motion to clarify hierarchy, feedback, or progress, never as decoration that competes with learning.",
   "Prefer short entrance animations between 200ms and 700ms, with calm easing.",
   "Use hover lift only on interactive surfaces such as cards, buttons, and selectable tiles.",
   "Avoid animating long text blocks, dense tables, or anything users need to read carefully.",

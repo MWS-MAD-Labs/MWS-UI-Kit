@@ -21,7 +21,6 @@ import {
 import { createPortal } from "react-dom";
 import {
   AlertCircle,
-  ArrowRight,
   CheckCircle2,
   Info,
   Loader2,
@@ -1176,7 +1175,7 @@ export function EmptyState({
       )}
     >
       {icon ? (
-        <div className="mx-auto mb-4 flex size-12 items-center justify-center radius-full bg-surface-card text-brand-gold">
+        <div className="mx-auto mb-4 flex size-12 items-center justify-center radius-full bg-surface-card text-brand-gold-strong">
           {icon}
         </div>
       ) : null}
@@ -1212,7 +1211,12 @@ export function SectionHeader({
   return (
     <div className="mx-auto mb-10 max-w-3xl text-center">
       {eyebrow ? (
-        <p className="heading-font mb-3 text-sm font-bold uppercase tracking-[0.2em] text-brand-gold">
+        <p
+          className={cx(
+            "heading-font mb-3 text-sm font-bold uppercase tracking-[0.2em]",
+            inverse ? "text-inverse" : "text-brand-gold-strong"
+          )}
+        >
           {eyebrow}
         </p>
       ) : null}
@@ -1293,16 +1297,5 @@ export function EmptyStatePreview() {
       title="No reflections yet"
       description="Once students begin sharing their check-ins, their wellbeing patterns will appear here."
     />
-  );
-}
-
-export function LinkButton({ children }: { children: ReactNode }) {
-  return (
-    <a
-      className="heading-font inline-flex items-center gap-2 text-sm font-bold text-link"
-      href="#implementation"
-    >
-      {children} <ArrowRight size={16} />
-    </a>
   );
 }

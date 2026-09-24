@@ -442,7 +442,7 @@ function PageHeader({
     >
       <div className="min-w-0">
         {eyebrow ? (
-          <p className="heading-font mb-2 text-sm font-bold uppercase tracking-[0.18em] text-brand-gold">
+          <p className="heading-font mb-2 text-sm font-bold uppercase tracking-[0.18em] text-brand-gold-strong">
             {eyebrow}
           </p>
         ) : null}
