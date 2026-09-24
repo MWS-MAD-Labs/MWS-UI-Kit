@@ -46,6 +46,28 @@ describe("App header", () => {
     expect(toggle).toHaveAttribute("aria-pressed", "false");
   });
 
+  it("renders all Space palette previews instead of legacy product examples", () => {
+    render(<App />);
+
+    for (const spaceName of [
+      "Learnspace",
+      "SHIELDSpace",
+      "SAFESpace",
+      "CARESpace",
+    ]) {
+      expect(
+        screen.getByRole("heading", { name: spaceName })
+      ).toBeInTheDocument();
+    }
+
+    expect(screen.getByText('data-space="learn"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="shield"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="safe"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="care"')).toBeInTheDocument();
+    expect(screen.queryByText("Reading Buddy")).not.toBeInTheDocument();
+    expect(screen.queryByText("MWS Daily Check-in")).not.toBeInTheDocument();
+  });
+
   it("opens and closes the mobile navigation", async () => {
     const user = userEvent.setup();
     render(<App />);

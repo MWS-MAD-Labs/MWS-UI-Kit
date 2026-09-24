@@ -112,7 +112,13 @@ Do not hardcode random colors in MWS apps. Use the official palette.
 | Navy | `#1F2A44` | Evidence, academics, leadership, reports |
 | Sky | `#B8DDF8` | Calm, reflection, child-centered softness |
 
-### Recommended product palettes
+### Space palettes for all future apps
+
+Use [Space sub-themes](SPACE_THEMES.md) as the canonical palette guidance: Learnspace uses Burgundy + Gold, SHIELDSpace Sky + Navy, SAFESpace Sage + Gold, and CARESpace Navy + Rose. Set `data-space` and `data-theme` on `html`; existing semantic component tokens follow the Space. Keep status colors and logo artwork unchanged.
+
+### Legacy product palette examples
+
+The following examples predate Spaces. They do not assign app ownership and must not override the owning Space's primary interaction color.
 
 | Product type | Palette |
 | --- | --- |
@@ -128,7 +134,7 @@ Do not hardcode random colors in MWS apps. Use the official palette.
 
 Do:
 
-- Use Burgundy as the brand anchor.
+- Keep Burgundy in the official MWS identity; use the owning Space for app identity and primary interactions.
 - Use White and warm surfaces generously.
 - Use Charcoal for readable body text.
 - Use one secondary color to communicate product context.
@@ -272,7 +278,7 @@ Use buttons consistently by action importance.
 
 | Button type | Usage |
 | --- | --- |
-| Primary Burgundy | Main action on the page |
+| Primary (owning Space) | Main action on the page |
 | Gold | Celebration or meaningful highlight only |
 | Soft | Gentle student-facing or low-pressure action |
 | Outline | Secondary action |

@@ -476,6 +476,27 @@ npm run docker:up
 npm run docker:down
 ```
 
+## Space sub-themes
+
+Every future app belongs to one Space. Existing apps keep the default theme until they opt in.
+
+| Space | Function | Palette |
+| --- | --- | --- |
+| Learnspace (`learn`) | Academic | MWS Burgundy + Happiness Gold |
+| SHIELDSpace (`shield`) | Operations and facilities | Millennia Sky + Truth Navy |
+| SAFESpace (`safe`) | Finance | Goodness Sage + Happiness Gold |
+| CARESpace (`care`) | HR | Truth Navy + Compassion Rose |
+
+Set the Space and light/dark mode on the same root element:
+
+```html
+<html data-space="shield" data-theme="light">
+```
+
+The existing stylesheet applies accessible Space colors to primary/secondary/soft/ghost actions, links, selected surfaces and focus rings. Status colors, logo assets, typography and neutral surfaces stay shared. No provider is needed; nested Space wrappers are not supported.
+
+Import `spaceThemes` and `type Space` from `mws-ui-kit` for typed metadata. See [Space sub-themes](docs/SPACE_THEMES.md) for exact colors, component mappings and migration rules.
+
 ## Additional docs
 
 - [`docs/DataTable.md`](docs/DataTable.md): detailed `DataTable` behavior, virtualization, and limitations.

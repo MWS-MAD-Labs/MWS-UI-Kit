@@ -30,14 +30,14 @@ When asked to create or change a screen:
    - Proofpoint/performance/evidence
    - Parent communication
    - Admin/internal tooling
-2. Choose the palette:
-   - Base: Burgundy `#7E1518`, White `#FFFFFF`, Charcoal `#241718`.
-   - Add one meaningful secondary color:
-     - Reading/library: Gold + Sky
-     - Wellbeing/check-in: Rose + Sky
-     - MTSS/support: Sage + Sky
-     - Performance/evidence: Navy + Gold
-     - Parent communication: mostly White + Charcoal, Burgundy for structure, small Gold accent
+2. Assign the app's owning Space and use `docs/SPACE_THEMES.md`:
+   - Learnspace (academic): Burgundy + Gold.
+   - SHIELDSpace (operations/facilities): Sky + Navy.
+   - SAFESpace (finance): Sage + Gold.
+   - CARESpace (HR): Navy + Rose.
+   - All share White/warm surfaces and Charcoal text; use semantic tokens for accessible action shades.
+   - Set `data-space` and `data-theme` on the same `html` element. Keep status tokens unchanged.
+   - Confirm ownership for cross-functional apps rather than inferring it from the product name.
 3. Compose from existing primitives first:
    - `Button`
    - `Card`

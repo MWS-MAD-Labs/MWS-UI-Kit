@@ -33,18 +33,22 @@ Secondary colors:
 - Navy `#1F2A44`: evidence, academics, reports, leadership views.
 - Sky `#B8DDF8`: calm, reflection, child-centered softness.
 
-## Product palettes
+## Space palettes
 
-- Reading/library: Burgundy + Gold + Sky.
-- Wellbeing/check-in: Burgundy + Rose + Sky.
-- MTSS/student support: Burgundy + Sage + Sky.
-- Proofpoint/performance/evidence: Burgundy + Navy + Gold.
-- Parent communication: White + Charcoal + Burgundy, with small Gold accents.
+Canonical guidance: `docs/SPACE_THEMES.md`; typed metadata: `spaceThemes` in `src/tokens.ts`.
+
+- Learnspace (`learn`): academic, Burgundy + Gold.
+- SHIELDSpace (`shield`): operations/facilities, Sky + Navy.
+- SAFESpace (`safe`): finance, Sage + Gold.
+- CARESpace (`care`): HR, Navy + Rose.
+- All share neutral surfaces, typography and unchanged status tokens.
+- Set `data-space` and `data-theme` on the same html root. Nested scopes are unsupported.
+- Use semantic interaction tokens, not raw Sky/Sage swatches with white labels.
 
 ## Agent decision flow
 
 1. Identify product context.
-2. Choose one meaningful secondary color in addition to Burgundy, White, and Charcoal.
+2. Assign the app's owning Space and follow its palette; confirm ownership for cross-functional apps.
 3. Compose from existing primitives and page templates.
 4. Use approved typography: Plus Jakarta Sans for headings/controls, Nunito Sans for body, Lora only for quotes.
 5. Write warm, specific, encouraging copy.

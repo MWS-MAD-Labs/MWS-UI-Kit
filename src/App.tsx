@@ -29,7 +29,6 @@ import {
   foundations,
   metricCards,
   pageTemplates,
-  productExamples,
   statuses,
   values,
 } from "./data/uiKit";
@@ -48,6 +47,7 @@ import {
   SectionHeader,
 } from "./components/UIPrimitives";
 import { MwsLogo } from "./components/MwsLogo";
+import { spaceThemes, type Space } from "./tokens";
 
 const foundationThemes = [
   "bg-brand-rose-soft text-brand-rose",
@@ -63,12 +63,17 @@ const componentGroupThemes = [
   "border-status-info bg-brand-sky-soft text-brand-sky",
 ];
 
-const productBackgrounds = [
-  "var(--mws-color-brand-sky-soft)",
-  "var(--mws-color-brand-rose-soft)",
-  "var(--mws-color-brand-sage-soft)",
-  "var(--mws-color-brand-navy-soft)",
-];
+const spaceEntries = Object.entries(spaceThemes) as [
+  Space,
+  (typeof spaceThemes)[Space],
+][];
+
+const spaceDomains: Record<Space, string> = {
+  learn: "Academic",
+  shield: "Operations and facilities",
+  safe: "Finance",
+  care: "HR",
+};
 const templateIconThemes = [
   "text-brand-rose",
   "text-brand-sage",
@@ -169,13 +174,13 @@ function App() {
       onSelect: () => jumpToSection("motion"),
     },
     {
-      id: "examples",
-      label: "Open examples",
-      description: "See product references and school contexts",
-      keywords: ["products", "apps"],
+      id: "spaces",
+      label: "Open Spaces",
+      description: "Compare the four Space palettes and UI tokens",
+      keywords: ["spaces", "themes", "palettes", "apps"],
       group: "Navigate",
       icon: <ClipboardCheck className="size-4" />,
-      onSelect: () => jumpToSection("examples"),
+      onSelect: () => jumpToSection("spaces"),
     },
     {
       id: "consumers",
@@ -213,7 +218,7 @@ function App() {
       <ComponentSystem />
       <AnimationKit />
       <PatternsPreview />
-      <ProductExamples />
+      <SpaceThemePreviews />
       <Templates />
       <ConsumerGuidance />
       <FinalChecklist />
@@ -239,7 +244,7 @@ function Navigation({
     "Tokens",
     "Components",
     "Motion",
-    "Examples",
+    "Spaces",
     "Consumers",
   ];
 
@@ -850,7 +855,7 @@ function ComponentSystem() {
       <SectionHeader
         eyebrow="Component system"
         title="Reusable building blocks for every MAD Labs app"
-        description="The kit includes base components, role-aware layouts, dashboard patterns, and MWS-specific education components. Secondary colors carry product meaning while Burgundy remains the shared anchor."
+        description="The kit includes base components, role-aware layouts, dashboard patterns, and MWS-specific education components. Space themes change semantic interaction colors while typography, layout and status meanings stay shared."
       />
       <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-4">
         {componentGroups.map((group, index) => (
@@ -1160,51 +1165,88 @@ function PatternsPreview() {
   );
 }
 
-function ProductExamples() {
+function SpaceThemePreviews() {
   return (
-    <section id="examples" className="bg-surface-card px-5 py-20 lg:px-8">
+    <section id="spaces" className="bg-surface-card px-5 py-20 lg:px-8">
       <SectionHeader
-        eyebrow="Product references"
-        title="One system, different school contexts"
-        description="Each MAD Labs product uses Burgundy as the shared anchor while one supporting color communicates the product’s purpose."
+        eyebrow="Space themes"
+        title="One UI kit, four distinct Spaces"
+        description="Each Space combines an MWS identity color with one supporting accent. Accessible action shades translate the palette into buttons, links, focus rings and selected states without changing status meanings."
       />
       <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
-        {productExamples.map((product, index) => {
-          const Icon = product.icon;
+        {spaceEntries.map(([space, theme]) => {
+          const palette = theme.light;
           return (
-            <Card key={product.name} className="shadow-none">
+            <Card key={space} className="overflow-hidden shadow-none" padding="none">
               <div
-                className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--mws-color-surface-card)_70%,transparent)] p-5"
-                style={{ background: productBackgrounds[index] }}
+                className="p-6 md:p-8"
+                style={{ background: palette.soft }}
               >
-                <div className="flex flex-col gap-6 md:flex-row md:items-start">
-                  <div
-                    className={`flex size-16 shrink-0 items-center justify-center rounded-3xl ${
-                      index === 0 ? "text-brand-sky-on" : "text-inverse"
-                    }`}
-                    style={{ background: product.accent }}
-                  >
-                    <Icon size={30} />
-                  </div>
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <Badge tone="burgundy">{product.palette}</Badge>
-                    <h3 className="heading-font mt-4 text-2xl font-extrabold text-brand">
-                      {product.name}
-                    </h3>
-                    <p className="mt-3 leading-7 text-tertiary">
-                      {product.description}
+                    <p
+                      className="heading-font text-sm font-bold"
+                      style={{ color: palette.primary }}
+                    >
+                      {spaceDomains[space]}
                     </p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {product.components.map((component) => (
-                        <span
-                          key={component}
-                          className="heading-font rounded-full bg-[color-mix(in_srgb,var(--mws-color-surface-card)_85%,transparent)] px-3 py-1 text-xs font-bold text-secondary"
-                        >
-                          {component}
-                        </span>
-                      ))}
-                    </div>
+                    <h3 className="heading-font mt-2 text-3xl font-extrabold text-primary">
+                      {theme.name}
+                    </h3>
+                    <p className="mt-3 max-w-lg leading-7 text-secondary">
+                      {theme.identity.name} establishes the Space identity. {theme.accent.name} supports emphasis while neutral surfaces keep the interface readable.
+                    </p>
                   </div>
+                  <code className="self-start rounded-lg border border-[color-mix(in_srgb,var(--mws-color-border-default)_70%,transparent)] bg-white px-3 py-2 text-xs font-bold text-[#241718]">
+                    data-space=&quot;{space}&quot;
+                  </code>
+                </div>
+
+                <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {[
+                    ["Identity", theme.identity.color],
+                    ["Action", palette.primary],
+                    ["Accent", theme.accent.color],
+                    ["Soft", palette.soft],
+                  ].map(([label, color]) => (
+                    <div key={label} className="rounded-2xl bg-white p-3">
+                      <div
+                        className="h-14 rounded-xl border border-black/10"
+                        style={{ background: color }}
+                      />
+                      <p className="heading-font mt-3 text-xs font-bold text-[#241718]">
+                        {label}
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-[#5D4B4C]">
+                        {color}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 grid gap-3 rounded-3xl bg-white p-4 sm:grid-cols-[auto_1fr_auto] sm:items-center">
+                  <div
+                    className="size-11 rounded-2xl"
+                    style={{ background: theme.identity.color }}
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <p className="heading-font font-bold text-[#241718]">
+                      Semantic component preview
+                    </p>
+                    <p className="mt-1 text-sm text-[#5D4B4C]">
+                      The action shade is distinct from status colors.
+                    </p>
+                  </div>
+                  <span
+                    className="heading-font inline-flex min-h-11 items-center justify-center rounded-full px-5 py-3 text-sm font-bold"
+                    style={{
+                      background: palette.primary,
+                      color: palette.text,
+                    }}
+                  >
+                    Primary action
+                  </span>
                 </div>
               </div>
             </Card>

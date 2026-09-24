@@ -4,7 +4,7 @@ import {
   CheckCircle2,
   HeartHandshake,
   Leaf,
-  Library,
+
   LineChart,
   MessageCircleHeart,
   ShieldCheck,
@@ -124,7 +124,7 @@ export const aiAgentBrief = [
 export const agentDecisionFlow = [
   "Read docs/AI_AGENT_GUIDE.md for the compact workflow.",
   "Match the screen to one product context: reading, wellbeing, MTSS, performance, parent communication, or admin.",
-  "Use Burgundy, White, and Charcoal as the base; add only one meaningful secondary color unless the product guidance says otherwise.",
+  "Assign the owning Space: Learnspace (academic), SHIELDSpace (operations/facilities), SAFESpace (finance), or CARESpace (HR). Follow docs/SPACE_THEMES.md and keep shared neutral surfaces and status colors.",
   "Compose the screen from existing primitives and page templates before creating a new component.",
   "Write warm, specific copy that explains the next action without shame, fear, or pressure.",
   "Check focus states, labels, contrast, keyboard access, reduced motion, and build output before finishing.",
@@ -205,64 +205,6 @@ export const componentGroups = [
   },
 ];
 
-export const productExamples = [
-  {
-    name: "Reading Buddy",
-    description:
-      "A joyful library and reading progress experience for students, teachers, and librarians.",
-    icon: Library,
-    palette: "Burgundy + Gold + Sky",
-    components: [
-      "BookCard",
-      "ReadingProgress",
-      "QuizStatusBadge",
-      "LibraryShelf",
-    ],
-    accent: "var(--mws-color-brand-sky)",
-  },
-  {
-    name: "MWS Daily Check-in",
-    description:
-      "A safe, reflective wellbeing product for students and staff to share emotional patterns.",
-    icon: MessageCircleHeart,
-    palette: "Burgundy + Rose + Sky",
-    components: [
-      "EmotionPicker",
-      "CheckInCard",
-      "MoodHistoryCard",
-      "CompassionPrompt",
-    ],
-    accent: "var(--mws-color-brand-rose)",
-  },
-  {
-    name: "MWS MTSS System",
-    description:
-      "A non-punitive support workflow for strategies, tiers, mentors, reviews, and growth.",
-    icon: UsersRound,
-    palette: "Burgundy + Sage + Sky",
-    components: [
-      "TierBadge",
-      "InterventionCard",
-      "StrategyCard",
-      "ReviewTimeline",
-    ],
-    accent: "var(--mws-color-brand-sage)",
-  },
-  {
-    name: "MWS Proofpoint",
-    description:
-      "An evidence-based performance dashboard with fair scoring and clear approval flows.",
-    icon: LineChart,
-    palette: "Burgundy + Navy + Gold",
-    components: [
-      "EvidenceCard",
-      "AppraisalScoreCard",
-      "ApprovalFlow",
-      "PerformanceBadge",
-    ],
-    accent: "var(--mws-color-brand-navy)",
-  },
-];
 
 export const pageTemplates = [
   {
@@ -305,7 +247,7 @@ export const pageTemplates = [
 
 export const checklist = [
   "Does it feel compassionate and human-centered?",
-  "Is Burgundy clearly present without overpowering the content?",
+  "Does the app use its owning Space's semantic colors while preserving the official MWS logo?",
   "Is the layout spacious, calm, and readable?",
   "Are Gold and secondary colors used meaningfully and sparingly?",
   "Can parents, students, and teachers understand the next action quickly?",

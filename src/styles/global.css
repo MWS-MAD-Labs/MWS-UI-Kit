@@ -314,6 +314,103 @@
     --mws-shadow-brand: 0 10px 24px rgb(255 178 182 / 14%);
 }
 
+/* Space and theme belong on the same html element; nested Space scopes are unsupported.
+   Identity/accent are fixed brand swatches, not accessible text/action colors. */
+html[data-space="learn"] {
+    --mws-color-space-identity: #7e1518;
+    --mws-color-space-accent: #d6a13a;
+    --mws-color-brand-primary: #7e1518;
+    --mws-color-brand-primary-hover: #681114;
+    --mws-color-brand-primary-soft: #f5e7e8;
+    --mws-color-brand-primary-softer: #eed6d8;
+}
+
+/* New light hovers use 80% of the action color's sRGB channels, rounded. */
+html[data-space="shield"] {
+    --mws-color-space-identity: #b8ddf8;
+    --mws-color-space-accent: #1f2a44;
+    --mws-color-brand-primary: #25638e;
+    --mws-color-brand-primary-hover: #1e4f72;
+    --mws-color-brand-primary-soft: #eff8fe;
+    --mws-color-brand-primary-softer: #ddeef9;
+}
+
+html[data-space="safe"] {
+    --mws-color-space-identity: #6f8b6a;
+    --mws-color-space-accent: #d6a13a;
+    --mws-color-brand-primary: #486142;
+    --mws-color-brand-primary-hover: #3a4e35;
+    --mws-color-brand-primary-soft: #edf3eb;
+    --mws-color-brand-primary-softer: #dde8d9;
+}
+
+html[data-space="care"] {
+    --mws-color-space-identity: #1f2a44;
+    --mws-color-space-accent: #b94a4e;
+    --mws-color-brand-primary: #1f2a44;
+    --mws-color-brand-primary-hover: #192236;
+    --mws-color-brand-primary-soft: #e9edf6;
+    --mws-color-brand-primary-softer: #d8e0f0;
+}
+
+html[data-space="learn"][data-theme="dark"] {
+    --mws-color-brand-primary: #ffb2b6;
+    --mws-color-brand-primary-hover: #ffd1d3;
+    --mws-color-brand-primary-soft: #351719;
+    --mws-color-brand-primary-softer: #442023;
+}
+
+html[data-space="shield"][data-theme="dark"] {
+    --mws-color-brand-primary: var(--mws-color-brand-sky);
+    --mws-color-brand-primary-hover: var(--mws-color-brand-sky-text);
+    --mws-color-brand-primary-soft: var(--mws-color-brand-sky-soft);
+    --mws-color-brand-primary-softer: #1c3349;
+}
+
+html[data-space="safe"][data-theme="dark"] {
+    --mws-color-brand-primary: var(--mws-color-brand-sage);
+    --mws-color-brand-primary-hover: var(--mws-color-brand-sage-text);
+    --mws-color-brand-primary-soft: var(--mws-color-brand-sage-soft);
+    --mws-color-brand-primary-softer: #2b3b2c;
+}
+
+html[data-space="care"][data-theme="dark"] {
+    --mws-color-brand-primary: var(--mws-color-brand-navy);
+    --mws-color-brand-primary-hover: #ced8f3;
+    --mws-color-brand-primary-soft: var(--mws-color-brand-navy-soft);
+    --mws-color-brand-primary-softer: #24314d;
+}
+
+/* Rebind aliases where Space is selected so inherited values cannot retain burgundy. */
+html:is([data-space="learn"], [data-space="shield"], [data-space="safe"], [data-space="care"]) {
+    --mws-color-text-brand: var(--mws-color-brand-primary);
+    --mws-color-text-link: var(--mws-color-brand-primary);
+    --mws-color-text-link-hover: var(--mws-color-brand-primary-hover);
+    --mws-color-surface-brand-soft: var(--mws-color-brand-primary-soft);
+    --mws-color-border-brand: color-mix(in srgb, var(--mws-color-brand-primary) 25%, transparent);
+    --mws-color-border-focus: var(--mws-color-brand-primary);
+    --mws-color-action-primary-background: var(--mws-color-brand-primary);
+    --mws-color-action-primary-background-hover: var(--mws-color-brand-primary-hover);
+    --mws-color-action-primary-text: var(--mws-color-text-inverse);
+    --mws-color-action-secondary-background: var(--mws-color-surface-card);
+    --mws-color-action-secondary-background-hover: var(--mws-color-brand-primary-soft);
+    --mws-color-action-secondary-border: var(--mws-color-border-brand);
+    --mws-color-action-secondary-text: var(--mws-color-brand-primary);
+    --mws-color-action-soft-background: var(--mws-color-brand-primary-soft);
+    --mws-color-action-soft-background-hover: var(--mws-color-brand-primary-softer);
+    --mws-color-action-soft-text: var(--mws-color-brand-primary);
+    --mws-color-action-ghost-background-hover: var(--mws-color-brand-primary-soft);
+    --mws-color-action-ghost-text: var(--mws-color-brand-primary);
+    --mws-shadow-brand: 0 10px 24px color-mix(in srgb, var(--mws-color-brand-primary) 20%, transparent);
+}
+
+html:is([data-space="learn"], [data-space="shield"], [data-space="safe"], [data-space="care"])[data-theme="dark"] {
+    --mws-color-border-brand: color-mix(in srgb, var(--mws-color-brand-primary) 35%, transparent);
+    --mws-color-action-secondary-background: transparent;
+    --mws-color-action-soft-text: var(--mws-color-brand-primary-hover);
+    --mws-shadow-brand: 0 10px 24px color-mix(in srgb, var(--mws-color-brand-primary) 14%, transparent);
+}
+
 * {
     box-sizing: border-box;
 }
