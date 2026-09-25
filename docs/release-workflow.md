@@ -84,7 +84,15 @@ Review:
 
 ## Publish
 
-After the version changes are merged and npm credentials are configured:
+The GitHub Release workflow publishes through npm Trusted Publishing (OIDC), so it does not depend on a long-lived write token. The `mws-ui-kit` package must authorize this publisher on npmjs.com:
+
+- Provider: GitHub Actions
+- Organization: `MWS-MAD-Labs`
+- Repository: `MWS-UI-Kit`
+- Workflow filename: `release.yml`
+- Allowed action: direct `npm publish`
+
+The workflow uses a GitHub-hosted runner, Node 24, and `id-token: write`. For a manual authenticated publish outside CI:
 
 ```bash
 npm run release
@@ -112,3 +120,4 @@ Use [`semver-policy.md`](semver-policy.md) as the authoritative source for patch
 - [ ] Changelog text is understandable to a new consumer.
 - [ ] Migration notes are present for breaking changes.
 - [ ] Published package includes JavaScript, types, and stylesheet output.
+- [ ] npm Trusted Publisher matches `MWS-MAD-Labs/MWS-UI-Kit` and `release.yml` exactly.

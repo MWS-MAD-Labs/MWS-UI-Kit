@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MWS-MAD-Labs/MWS-UI-Kit"
+    "url": "git+https://github.com/MWS-MAD-Labs/MWS-UI-Kit.git"
   },
   "type": "module",
   "main": "./dist/mws-ui-kit.umd.cjs",
