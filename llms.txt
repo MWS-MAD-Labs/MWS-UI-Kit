@@ -41,9 +41,13 @@ Canonical guidance: `docs/SPACE_THEMES.md`; typed metadata: `spaceThemes` in `sr
 - SHIELDSpace (`shield`): operations/facilities, Sky + Navy.
 - SAFESpace (`safe`): finance, Sage + Gold.
 - CARESpace (`care`): HR, Navy + Rose.
+- COMPASSspace (`compass`): CRM, PR & Admissions, True North Cobalt + Guidance Gold.
+- RISEspace (`rise`): SEN & Pelangi Therapy, Pelangi Teal + Compassion Rose; use Deep Teal for light-mode actions.
+- BRIDGEspace (`bridge`): R&D, Library & Health, Insight Terracotta + Wellness Aqua.
+- MAD Labs (`mad-labs`): Innovation & Sustainability, Foresight Indigo + Happiness Gold.
 - All share neutral surfaces, typography and unchanged status tokens.
 - Set `data-space` and `data-theme` on the same html root. Nested scopes are unsupported.
-- Use semantic interaction tokens, not raw Sky/Sage swatches with white labels.
+- Use semantic interaction tokens rather than raw identity swatches for controls and links.
 
 ## Agent decision flow
 

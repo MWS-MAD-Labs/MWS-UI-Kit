@@ -48,7 +48,7 @@ function color(values: Record<string, string>, name: string) {
 
 describe("Space themes", () => {
   it("exports the exact identities and deliberate accents", () => {
-    expect(spaces).toEqual(["learn", "shield", "safe", "care"]);
+    expect(spaces).toEqual(["learn", "shield", "safe", "care", "compass", "rise", "bridge", "mad-labs"]);
     expect(spaces.map((space) => {
       const { name, domain, identity, accent } = spaceThemes[space];
       return [name, domain, identity.name, identity.color, accent.name, accent.color];
@@ -57,7 +57,23 @@ describe("Space themes", () => {
       ["SHIELDSpace", "operations/facilities", "Sky", "#B8DDF8", "Navy", "#1F2A44"],
       ["SAFESpace", "finance", "Sage", "#6F8B6A", "Gold", "#D6A13A"],
       ["CARESpace", "HR", "Navy", "#1F2A44", "Rose", "#B94A4E"],
+      ["COMPASSspace", "CRM, PR & Admissions", "True North Cobalt", "#23529E", "Guidance Gold", "#D8A13A"],
+      ["RISEspace", "SEN & Pelangi Therapy", "Pelangi Teal", "#4A9E8B", "Compassion Rose", "#B94A4E"],
+      ["BRIDGEspace", "R&D, Library & Health", "Insight Terracotta", "#A65332", "Wellness Aqua", "#5C9894"],
+      ["MAD Labs", "Innovation & Sustainability", "Foresight Indigo", "#4C439E", "Happiness Gold", "#D6A13A"],
     ]);
+  });
+
+  it.each([
+    ["compass", "#23529e", "#e9eef5", "#9bbdf5", "#172239"],
+    ["rise", "#217471", "#e9f1f1", "#8ed8d3", "#162c2d"],
+    ["bridge", "#a65332", "#f6eeea", "#f0a88b", "#3b231b"],
+    ["mad-labs", "#4c439e", "#edecf5", "#b4aff7", "#221e39"],
+  ])("%s applies the reference action and tint in both modes", (space, light, lightSoft, dark, darkSoft) => {
+    expect(color(rootTokens(space), "action-primary-background")).toBe(light);
+    expect(color(rootTokens(space), "surface-brand-soft")).toBe(lightSoft);
+    expect(color(rootTokens(space, "dark"), "action-primary-background")).toBe(dark);
+    expect(color(rootTokens(space, "dark"), "surface-brand-soft")).toBe(darkSoft);
   });
 
   it("keeps no-space burgundy defaults and ignores unknown or nested Spaces", () => {

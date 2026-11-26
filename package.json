@@ -42,7 +42,7 @@
     "storybook:build": "storybook build -c apps/docs/.storybook",
     "changeset": "changeset",
     "changeset:status": "changeset status",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && npm install --package-lock-only --ignore-scripts --no-audit --no-fund",
     "release": "changeset publish",
     "docker:build": "docker build -t mws-ui-kit:latest .",
     "docker:up": "docker compose up --build",

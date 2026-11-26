@@ -54,6 +54,10 @@ describe("App header", () => {
       "SHIELDSpace",
       "SAFESpace",
       "CARESpace",
+      "COMPASSspace",
+      "RISEspace",
+      "BRIDGEspace",
+      "MAD Labs",
     ]) {
       expect(
         screen.getByRole("heading", { name: spaceName })
@@ -64,6 +68,10 @@ describe("App header", () => {
     expect(screen.getByText('data-space="shield"')).toBeInTheDocument();
     expect(screen.getByText('data-space="safe"')).toBeInTheDocument();
     expect(screen.getByText('data-space="care"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="compass"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="rise"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="bridge"')).toBeInTheDocument();
+    expect(screen.getByText('data-space="mad-labs"')).toBeInTheDocument();
     expect(screen.queryByText("Reading Buddy")).not.toBeInTheDocument();
     expect(screen.queryByText("MWS Daily Check-in")).not.toBeInTheDocument();
   });

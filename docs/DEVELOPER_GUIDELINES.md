@@ -114,7 +114,7 @@ Do not hardcode random colors in MWS apps. Use the official palette.
 
 ### Space palettes for all future apps
 
-Use [Space sub-themes](SPACE_THEMES.md) as the canonical palette guidance: Learnspace uses Burgundy + Gold, SHIELDSpace Sky + Navy, SAFESpace Sage + Gold, and CARESpace Navy + Rose. Set `data-space` and `data-theme` on `html`; existing semantic component tokens follow the Space. Keep status colors and logo artwork unchanged.
+Use [Space sub-themes](SPACE_THEMES.md) as the canonical guide to Space ownership and palettes. Set `data-space` and `data-theme` on `html`; existing semantic component tokens follow the Space. Keep status colors and logo artwork unchanged.
 
 ### Legacy product palette examples
 

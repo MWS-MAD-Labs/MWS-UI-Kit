@@ -437,21 +437,9 @@ npm run changeset
 
 Choose the package (`mws-ui-kit`), select `patch`, `minor`, or `major`, and write a concise summary for consumers.
 
-To prepare a release PR locally:
+Merge the feature PR with its changeset intact. The Release workflow opens a version PR, then publishes to npm via Trusted Publishing after that PR merges. The homepage deploys separately through GHCR and Komodo on pushes to `main`.
 
-```bash
-npm run version-packages
-npm run build
-npm run test
-```
-
-To publish after the version PR is merged and credentials are configured:
-
-```bash
-npm run release
-```
-
-See [`docs/release-workflow.md`](docs/release-workflow.md) for the complete process.
+See the [release workflow and deployment runbook](docs/release-workflow.md), including the [v0.4.0 rollout checklist](docs/release-workflow.md#v040-rollout-checklist).
 
 ## Local development
 
@@ -462,13 +450,16 @@ npm run build
 npm run test
 ```
 
-Preview the production build:
+Open [the Spaces gallery](http://localhost:5173/#spaces) while the dev server is running. The homepage starts in light mode when no preference is saved and remembers explicit theme choices.
+
+To build and preview the homepage:
 
 ```bash
-npm run preview
+npm run build:homepage
+npm run preview -- --config vite.homepage.config.ts
 ```
 
-Docker helpers are also available:
+To build a local container image or run the published GHCR image with Compose:
 
 ```bash
 npm run docker:build
@@ -478,7 +469,7 @@ npm run docker:down
 
 ## Space sub-themes
 
-Every future app belongs to one Space. Existing apps keep the default theme until they opt in.
+Every future app belongs to one Space. Existing apps keep the default theme until they opt in. The four new Spaces (`compass`, `rise`, `bridge`, `mad-labs`) are scheduled for `mws-ui-kit@0.4.0`.
 
 | Space | Function | Palette |
 | --- | --- | --- |
@@ -486,6 +477,10 @@ Every future app belongs to one Space. Existing apps keep the default theme unti
 | SHIELDSpace (`shield`) | Operations and facilities | Millennia Sky + Truth Navy |
 | SAFESpace (`safe`) | Finance | Goodness Sage + Happiness Gold |
 | CARESpace (`care`) | HR | Truth Navy + Compassion Rose |
+| COMPASSspace (`compass`) | CRM, PR & Admissions | True North Cobalt + Guidance Gold |
+| RISEspace (`rise`) | SEN & Pelangi Therapy | Pelangi Teal + Compassion Rose; Deep Teal for light-mode actions |
+| BRIDGEspace (`bridge`) | R&D, Library & Health | Insight Terracotta + Wellness Aqua |
+| MAD Labs (`mad-labs`) | Innovation & Sustainability | Foresight Indigo + Happiness Gold |
 
 Set the Space and light/dark mode on the same root element:
 

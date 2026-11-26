@@ -73,6 +73,10 @@ const spaceDomains: Record<Space, string> = {
   shield: "Operations and facilities",
   safe: "Finance",
   care: "HR",
+  compass: spaceThemes.compass.domain,
+  rise: spaceThemes.rise.domain,
+  bridge: spaceThemes.bridge.domain,
+  "mad-labs": spaceThemes["mad-labs"].domain,
 };
 const templateIconThemes = [
   "text-brand-rose",
@@ -176,7 +180,7 @@ function App() {
     {
       id: "spaces",
       label: "Open Spaces",
-      description: "Compare the four Space palettes and UI tokens",
+      description: "Compare Space palettes and UI tokens",
       keywords: ["spaces", "themes", "palettes", "apps"],
       group: "Navigate",
       icon: <ClipboardCheck className="size-4" />,
@@ -185,7 +189,7 @@ function App() {
     {
       id: "consumers",
       label: "Open consumer guide",
-      description: "Review v0.2.0 package usage and release notes",
+      description: "Review package usage and release guidance",
       keywords: ["package", "exports", "release", "semver", "modal"],
       group: "Navigate",
       icon: <BookOpen className="size-4" />,
@@ -218,7 +222,7 @@ function App() {
       <ComponentSystem />
       <AnimationKit />
       <PatternsPreview />
-      <SpaceThemePreviews />
+      <SpaceThemePreviews mode={theme} />
       <Templates />
       <ConsumerGuidance />
       <FinalChecklist />
@@ -1165,17 +1169,17 @@ function PatternsPreview() {
   );
 }
 
-function SpaceThemePreviews() {
+function SpaceThemePreviews({ mode }: { mode: Theme }) {
   return (
     <section id="spaces" className="bg-surface-card px-5 py-20 lg:px-8">
       <SectionHeader
         eyebrow="Space themes"
-        title="One UI kit, four distinct Spaces"
+        title="One UI kit, eight distinct Spaces"
         description="Each Space combines an MWS identity color with one supporting accent. Accessible action shades translate the palette into buttons, links, focus rings and selected states without changing status meanings."
       />
       <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
         {spaceEntries.map(([space, theme]) => {
-          const palette = theme.light;
+          const palette = theme[mode];
           return (
             <Card key={space} className="overflow-hidden shadow-none" padding="none">
               <div
@@ -1204,9 +1208,9 @@ function SpaceThemePreviews() {
 
                 <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {[
-                    ["Identity", theme.identity.color],
+                    [theme.identity.name, theme.identity.color],
                     ["Action", palette.primary],
-                    ["Accent", theme.accent.color],
+                    [theme.accent.name, theme.accent.color],
                     ["Soft", palette.soft],
                   ].map(([label, color]) => (
                     <div key={label} className="rounded-2xl bg-white p-3">
@@ -1311,9 +1315,9 @@ function ConsumerGuidance() {
   return (
     <section id="consumers" className="bg-surface-card px-5 py-20 lg:px-8">
       <SectionHeader
-        eyebrow="Using v0.2.0"
+        eyebrow="Using the package"
         title="Everything consumers need to adopt the package"
-        description="Version 0.2.0 turns the homepage into a clearer handoff for product teams: how to import the kit, which APIs are public, what accessibility guarantees changed, and how releases are governed."
+        description="Learn how to import the kit, use its public APIs and accessibility features, and follow the release process."
       />
       <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <Card className="overflow-hidden" padding="none">
@@ -1425,7 +1429,7 @@ import "mws-ui-kit/style.css";`}</code>
         <Card>
           <Badge tone="rose">Consumer checklist</Badge>
           <h3 className="heading-font mt-4 text-2xl font-bold text-primary">
-            Before adopting v0.2.0 in an app
+            Before adopting the UI kit in an app
           </h3>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {[

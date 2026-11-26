@@ -66,6 +66,38 @@ export const spaceThemes = {
     light: { primary: "#1F2A44", hover: "#192236", soft: "#E9EDF6", softer: "#D8E0F0", text: "#FFFFFF" },
     dark: { primary: "#B9C7EE", hover: "#CED8F3", soft: "#182136", softer: "#24314D", text: "#241718" },
   },
+  compass: {
+    name: "COMPASSspace",
+    domain: "CRM, PR & Admissions",
+    identity: { name: "True North Cobalt", color: "#23529E" },
+    accent: { name: "Guidance Gold", color: "#D8A13A" },
+    light: { primary: "#23529E", hover: "#1C427E", soft: "#E9EEF5", softer: "#D9E4F2", text: "#FFFFFF" },
+    dark: { primary: "#9BBDF5", hover: "#C3D8FB", soft: "#172239", softer: "#233451", text: "#241718" },
+  },
+  rise: {
+    name: "RISEspace",
+    domain: "SEN & Pelangi Therapy",
+    identity: { name: "Pelangi Teal", color: "#4A9E8B" },
+    accent: { name: "Compassion Rose", color: "#B94A4E" },
+    light: { primary: "#217471", hover: "#1A5D5A", soft: "#E9F1F1", softer: "#E2EEEE", text: "#FFFFFF" },
+    dark: { primary: "#8ED8D3", hover: "#B9EAE6", soft: "#162C2D", softer: "#223D3E", text: "#241718" },
+  },
+  bridge: {
+    name: "BRIDGEspace",
+    domain: "R&D, Library & Health",
+    identity: { name: "Insight Terracotta", color: "#A65332" },
+    accent: { name: "Wellness Aqua", color: "#5C9894" },
+    light: { primary: "#A65332", hover: "#854226", soft: "#F6EEEA", softer: "#F4ECE7", text: "#FFFFFF" },
+    dark: { primary: "#F0A88B", hover: "#FFD0BC", soft: "#3B231B", softer: "#503025", text: "#241718" },
+  },
+  "mad-labs": {
+    name: "MAD Labs",
+    domain: "Innovation & Sustainability",
+    identity: { name: "Foresight Indigo", color: "#4C439E" },
+    accent: { name: "Happiness Gold", color: "#D6A13A" },
+    light: { primary: "#4C439E", hover: "#3D367E", soft: "#EDECF5", softer: "#E1DFF0", text: "#FFFFFF" },
+    dark: { primary: "#B4AFF7", hover: "#D7D4FF", soft: "#221E39", softer: "#312A4D", text: "#241718" },
+  },
 } as const satisfies Record<string, {
   name: string;
   domain: string;

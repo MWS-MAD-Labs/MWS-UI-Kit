@@ -11,13 +11,7 @@
     <script>
       (() => {
         const savedTheme = localStorage.getItem("mws-theme");
-        const theme =
-          savedTheme === "light" || savedTheme === "dark"
-            ? savedTheme
-            : matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
       })();
     </script>
     <title>MWS Heart & Purpose UI Kit</title>

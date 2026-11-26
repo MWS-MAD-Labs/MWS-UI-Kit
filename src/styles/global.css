@@ -353,6 +353,42 @@ html[data-space="care"] {
     --mws-color-brand-primary-softer: #d8e0f0;
 }
 
+html[data-space="compass"] {
+    --mws-color-space-identity: #23529e;
+    --mws-color-space-accent: #d8a13a;
+    --mws-color-brand-primary: #23529e;
+    --mws-color-brand-primary-hover: #1c427e;
+    --mws-color-brand-primary-soft: #e9eef5;
+    --mws-color-brand-primary-softer: #d9e4f2;
+}
+
+html[data-space="rise"] {
+    --mws-color-space-identity: #4a9e8b;
+    --mws-color-space-accent: #b94a4e;
+    --mws-color-brand-primary: #217471;
+    --mws-color-brand-primary-hover: #1a5d5a;
+    --mws-color-brand-primary-soft: #e9f1f1;
+    --mws-color-brand-primary-softer: #e2eeee;
+}
+
+html[data-space="bridge"] {
+    --mws-color-space-identity: #a65332;
+    --mws-color-space-accent: #5c9894;
+    --mws-color-brand-primary: #a65332;
+    --mws-color-brand-primary-hover: #854226;
+    --mws-color-brand-primary-soft: #f6eeea;
+    --mws-color-brand-primary-softer: #f4ece7;
+}
+
+html[data-space="mad-labs"] {
+    --mws-color-space-identity: #4c439e;
+    --mws-color-space-accent: #d6a13a;
+    --mws-color-brand-primary: #4c439e;
+    --mws-color-brand-primary-hover: #3d367e;
+    --mws-color-brand-primary-soft: #edecf5;
+    --mws-color-brand-primary-softer: #e1dff0;
+}
+
 html[data-space="learn"][data-theme="dark"] {
     --mws-color-brand-primary: #ffb2b6;
     --mws-color-brand-primary-hover: #ffd1d3;
@@ -381,8 +417,39 @@ html[data-space="care"][data-theme="dark"] {
     --mws-color-brand-primary-softer: #24314d;
 }
 
+html[data-space="compass"][data-theme="dark"] {
+    --mws-color-brand-primary: #9bbdf5;
+    --mws-color-brand-primary-hover: #c3d8fb;
+    --mws-color-brand-primary-soft: #172239;
+    --mws-color-brand-primary-softer: #233451;
+}
+
+html[data-space="rise"][data-theme="dark"] {
+    --mws-color-brand-primary: #8ed8d3;
+    --mws-color-brand-primary-hover: #b9eae6;
+    --mws-color-brand-primary-soft: #162c2d;
+    --mws-color-brand-primary-softer: #223d3e;
+}
+
+html[data-space="bridge"][data-theme="dark"] {
+    --mws-color-brand-primary: #f0a88b;
+    --mws-color-brand-primary-hover: #ffd0bc;
+    --mws-color-brand-primary-soft: #3b231b;
+    --mws-color-brand-primary-softer: #503025;
+}
+
+html[data-space="mad-labs"][data-theme="dark"] {
+    --mws-color-brand-primary: #b4aff7;
+    --mws-color-brand-primary-hover: #d7d4ff;
+    --mws-color-brand-primary-soft: #221e39;
+    --mws-color-brand-primary-softer: #312a4d;
+}
+
 /* Rebind aliases where Space is selected so inherited values cannot retain burgundy. */
-html:is([data-space="learn"], [data-space="shield"], [data-space="safe"], [data-space="care"]) {
+html:is(
+    [data-space="learn"], [data-space="shield"], [data-space="safe"], [data-space="care"],
+    [data-space="compass"], [data-space="rise"], [data-space="bridge"], [data-space="mad-labs"]
+) {
     --mws-color-text-brand: var(--mws-color-brand-primary);
     --mws-color-text-link: var(--mws-color-brand-primary);
     --mws-color-text-link-hover: var(--mws-color-brand-primary-hover);
@@ -404,7 +471,10 @@ html:is([data-space="learn"], [data-space="shield"], [data-space="safe"], [data-
     --mws-shadow-brand: 0 10px 24px color-mix(in srgb, var(--mws-color-brand-primary) 20%, transparent);
 }
 
-html:is([data-space="learn"], [data-space="shield"], [data-space="safe"], [data-space="care"])[data-theme="dark"] {
+html:is(
+    [data-space="learn"], [data-space="shield"], [data-space="safe"], [data-space="care"],
+    [data-space="compass"], [data-space="rise"], [data-space="bridge"], [data-space="mad-labs"]
+)[data-theme="dark"] {
     --mws-color-border-brand: color-mix(in srgb, var(--mws-color-brand-primary) 35%, transparent);
     --mws-color-action-secondary-background: transparent;
     --mws-color-action-soft-text: var(--mws-color-brand-primary-hover);

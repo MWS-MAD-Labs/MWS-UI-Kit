@@ -124,7 +124,7 @@ export const aiAgentBrief = [
 export const agentDecisionFlow = [
   "Read docs/AI_AGENT_GUIDE.md for the compact workflow.",
   "Match the screen to one product context: reading, wellbeing, MTSS, performance, parent communication, or admin.",
-  "Assign the owning Space: Learnspace (academic), SHIELDSpace (operations/facilities), SAFESpace (finance), or CARESpace (HR). Follow docs/SPACE_THEMES.md and keep shared neutral surfaces and status colors.",
+  "Assign the owning Space using the function-to-Space table in docs/SPACE_THEMES.md. Keep shared neutral surfaces and status colors.",
   "Compose the screen from existing primitives and page templates before creating a new component.",
   "Write warm, specific copy that explains the next action without shame, fear, or pressure.",
   "Check focus states, labels, contrast, keyboard access, reduced motion, and build output before finishing.",

@@ -35,6 +35,10 @@ When asked to create or change a screen:
    - SHIELDSpace (operations/facilities): Sky + Navy.
    - SAFESpace (finance): Sage + Gold.
    - CARESpace (HR): Navy + Rose.
+   - COMPASSspace (CRM, PR & Admissions): Cobalt + Guidance Gold.
+   - RISEspace (SEN & Pelangi Therapy): Pelangi Teal + Rose; use Deep Teal for light-mode actions.
+   - BRIDGEspace (R&D, Library & Health): Terracotta + Wellness Aqua.
+   - MAD Labs (Innovation & Sustainability): Indigo + Happiness Gold.
    - All share White/warm surfaces and Charcoal text; use semantic tokens for accessible action shades.
    - Set `data-space` and `data-theme` on the same `html` element. Keep status tokens unchanged.
    - Confirm ownership for cross-functional apps rather than inferring it from the product name.

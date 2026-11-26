@@ -2,6 +2,8 @@
 
 Every future app belongs to one Space. Assign the Space by its owning function, not by a feature's color or its audience. A cross-functional app needs an agreed owner; do not infer ownership from its name. Existing apps remain unchanged until they opt in.
 
+COMPASSspace, RISEspace, BRIDGEspace and MAD Labs are part of the [v0.4.0 rollout](release-workflow.md#v040-rollout-checklist). The homepage gallery previews light and dark palettes with its theme toggle. With no saved preference, the homepage starts in light mode regardless of the system setting. Consuming apps still decide which theme to set on their own root element.
+
 ## Recommended combinations
 
 All Spaces share White `#FFFFFF` cards, warm `#FFFAF4` page surfaces and Deep Charcoal `#241718` body text in light mode. Keep these neutral surfaces dominant. Typography, spacing, radii and component behavior remain shared.
@@ -12,12 +14,16 @@ All Spaces share White `#FFFFFF` cards, warm `#FFFAF4` page surfaces and Deep Ch
 | SHIELDSpace | Operations and facilities | Millennia Sky `#B8DDF8` | Truth Navy `#1F2A44` | Sky identifies operational tools; Navy gives structure and readable contrast on Sky. |
 | SAFESpace | Finance | Goodness Sage `#6F8B6A` | Happiness Gold `#D6A13A` | Sage gives finance a distinct identity; restrained Gold highlights important financial summaries, not payment status. |
 | CARESpace | HR | Truth Navy `#1F2A44` | Compassion Rose `#B94A4E` | Navy supports formal HR workflows; Rose provides a warmer accent for people-focused content. |
+| COMPASSspace | CRM, PR & Admissions | True North Cobalt `#23529E` | Guidance Gold `#D8A13A` | Cobalt anchors outward-facing tools; Gold highlights key information. |
+| RISEspace | SEN & Pelangi Therapy | Pelangi Teal `#4A9E8B` | Compassion Rose `#B94A4E` | Pelangi Teal identifies the Space; Deep Teal provides the contrast needed for actions. |
+| BRIDGEspace | R&D, Library & Health | Insight Terracotta `#A65332` | Wellness Aqua `#5C9894` | Terracotta anchors shared knowledge tools; Aqua provides a complementary accent. |
+| MAD Labs | Innovation & Sustainability | Foresight Indigo `#4C439E` | Happiness Gold `#D6A13A` | Indigo identifies innovation tools; Gold highlights key information. |
 
 Use one supporting accent sparingly. Additional palette colors should carry an actual status or data meaning, not decoration. The MWS logo stays in its official Burgundy/White artwork in every Space; never recolor it to match the app.
 
 ## Identity versus interaction
 
-Sky and Sage identity swatches do not support white normal-sized text at AA contrast. Keep the exact brand swatches for identification; use the existing deeper palette shades for actionable controls and links. Never use an identity swatch as a text color without checking its background.
+Sky, Sage and Pelangi Teal identity swatches do not support white normal-sized text at AA contrast. Keep the exact brand swatches for identification; use the deeper action shades for controls and links. Never use an identity swatch as a text color without checking its background.
 
 | Space | Light primary action and link | Action hover | Selected/soft surface | Dark primary action and link | Dark soft surface |
 | --- | --- | --- | --- | --- | --- |
@@ -25,6 +31,10 @@ Sky and Sage identity swatches do not support white normal-sized text at AA cont
 | SHIELDSpace | `#25638E` | `#1E4F72` | `#EFF8FE` | `#9FD1F4` | `#142536` |
 | SAFESpace | `#486142` | `#3A4E35` | `#EDF3EB` | `#A8C4A0` | `#1F2B20` |
 | CARESpace | `#1F2A44` | `#192236` | `#E9EDF6` | `#B9C7EE` | `#182136` |
+| COMPASSspace | `#23529E` | `#1C427E` | `#E9EEF5` | `#9BBDF5` | `#172239` |
+| RISEspace | Deep Teal `#217471` | `#1A5D5A` | `#E9F1F1` | `#8ED8D3` | `#162C2D` |
+| BRIDGEspace | `#A65332` | `#854226` | `#F6EEEA` | `#F0A88B` | `#3B231B` |
+| MAD Labs | `#4C439E` | `#3D367E` | `#EDECF5` | `#B4AFF7` | `#221E39` |
 
 Light solid primary actions use White labels; dark solid primary actions use Charcoal labels. Dark mode keeps the kit's shared dark neutral surfaces and uses lighter interaction colors rather than dark Navy or Burgundy on dark backgrounds. New hover/selection shades are UI derivatives, not additions to the official identity palette.
 
@@ -68,7 +78,7 @@ document.documentElement.dataset.space = space;
 document.documentElement.dataset.theme = "light";
 ```
 
-Supported IDs: `learn`, `shield`, `safe`, `care`. Omit `data-theme` for light mode. Set it to `dark` for the dark palette. Removing `data-space` restores the original kit theme; unknown IDs do not apply a Space override.
+Supported IDs: `learn`, `shield`, `safe`, `care`, `compass`, `rise`, `bridge`, `mad-labs`. Omit `data-theme` for light mode. Set it to `dark` for the dark palette. Removing `data-space` restores the original kit theme; unknown IDs do not apply a Space override.
 
 `spaceThemes` is readonly metadata with `name`, `domain`, `identity`, `accent`, `light` and `dark`. Each mode provides `primary`, `hover`, `soft`, `softer` and `text` (the solid-action foreground). CSS is included by the existing package stylesheet; no provider or new dependency is needed.
 
@@ -83,6 +93,6 @@ Supported IDs: `learn`, `shield`, `safe`, `care`. Omit `data-theme` for light mo
 
 ## Validation
 
-`src/spaces.test.ts` checks all four light/dark palettes against their CSS declarations, primary and hover label contrast, link and soft-state contrast, focus contrast on tested surfaces, and unchanged status tokens. These are token-level tests, not a claim that every existing screen is accessibility-audited. Product teams must still test component states, keyboard navigation and responsive layouts in their consuming apps.
+`src/spaces.test.ts` checks all eight light/dark palettes against their CSS declarations, primary and hover label contrast, link and soft-state contrast, focus contrast on tested surfaces, and unchanged status tokens. These are token-level tests, not a claim that every existing screen is accessibility-audited. Product teams must still test component states, keyboard navigation and responsive layouts in their consuming apps.
 
 Design intent: ENERGY 2 / RHYTHM 1 / MOTION 1. Space colors supply identity; consistent layout and typography support moving between school apps. This feature adds no animation, asset, navigation or new component behavior.
